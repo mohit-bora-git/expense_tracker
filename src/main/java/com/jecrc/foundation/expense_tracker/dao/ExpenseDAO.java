@@ -1,9 +1,11 @@
 package com.jecrc.foundation.expense_tracker.dao;
 
 import com.jecrc.foundation.expense_tracker.dbos.ExpenseDBO;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ExpenseDAO extends BaseDAO<ExpenseDBO>{
   @Override
   public ExpenseDBO save(ExpenseDBO expenseDbo) {

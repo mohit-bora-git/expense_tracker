@@ -7,11 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDO {
-  private Long id;
-  private String name;
-  private String nickName;
-  private String profileImageUrl;
-  private Long createdAt;
-  private Long updatedAt;
+public class SignInDO {
+  private String email;
+  private String password;
 }

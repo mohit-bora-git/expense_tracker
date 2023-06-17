@@ -1,6 +1,8 @@
 package com.jecrc.foundation.expense_tracker.config;
 
 import com.jecrc.foundation.expense_tracker.helper.ConfigPropertyService;
+import com.jecrc.foundation.expense_tracker.mapper.ExpenseMapper;
+import com.jecrc.foundation.expense_tracker.mapper.UserMapper;
 import com.jecrc.foundation.expense_tracker.utils.StringUtils;
 import org.apache.ibatis.datasource.pooled.PooledDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -21,7 +23,7 @@ public class MySQLConfiguration {
   private DataSource dataSource;
 
   private void registerMappers(SqlSessionTemplate sqlSessionTemplate) {
-    Class<?>[] mappers = {UserMapper.class, BoardMapper.class};
+    Class<?>[] mappers = {UserMapper.class, ExpenseMapper.class};
     for (Class<?> cls : mappers) {
       sqlSessionTemplate.getConfiguration().addMapper(cls);
     }

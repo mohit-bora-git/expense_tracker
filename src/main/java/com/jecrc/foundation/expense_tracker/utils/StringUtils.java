@@ -16,24 +16,15 @@ public class StringUtils {
     }
 
     public static boolean isNotEmpty(String string) {
-        if (string!=null && !string.isEmpty()) {
-            return true;
-        }
-        return false;
+        return string != null && !string.isEmpty();
     }
 
     public static boolean isNullOrEmpty(String string) {
-        if (string==null || string.isEmpty()) {
-            return true;
-        }
-        return false;
+        return string == null || string.isEmpty();
     }
 
     public static boolean isNotNullAndEmpty(String string) {
-        if (string!=null && !string.isEmpty()) {
-            return true;
-        }
-        return false;
+        return string != null && !string.isEmpty();
     }
 
     public static int convertToInt(String string) {
@@ -67,7 +58,7 @@ public class StringUtils {
 
     public static String printStackTrace(Exception e) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Exception: " + e.getMessage() + "\n\t");
+        stringBuilder.append("Exception: ").append(e.getMessage()).append("\n\t");
         for (StackTraceElement stmt : e.getStackTrace()) {
             stringBuilder.append(stmt.toString()).append("\n\t");
         }
