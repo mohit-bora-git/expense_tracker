@@ -12,8 +12,8 @@ public class CollectionUtils {
   private CollectionUtils() {
   }
 
-  public static String convertCollectionToCsv(Collection<?> list) {
-    return StringUtils.collectionToCommaDelimitedString(list);
+  public static String convertCollectionToCsv(Collection<?> collection) {
+    return StringUtils.collectionToCommaDelimitedString(collection);
   }
 
   public static List<String> convertCsvToList(String csv) {

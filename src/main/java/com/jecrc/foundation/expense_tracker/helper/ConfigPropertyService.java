@@ -58,21 +58,9 @@ public class ConfigPropertyService {
     return config.getInt("async.threadpool.await.termination.seconds");
   }
 
-  public Integer getTaskThreadPoolMaxPoolSize() {
-    return config.getInt("task.threadpool.max.pool.size", 10);
-  }
+  public Integer getPasswordMinLength(){return config.getInt("password.min.length");}
 
-  public Integer getTaskThreadpoolCorePoolSize() {
-    return config.getInt("task.threadpool.core.pool.size");
-  }
-
-  public Integer getTaskThreadPoolQueueCapacity() {
-    return config.getInt("task.threadpool.queue.capacity");
-  }
-
-  public Integer getTaskThreadPoolAwaitTerminationSeconds() {
-    return config.getInt("task.threadpool.await.termination.seconds");
-  }
+  public Integer getPasswordMaxLength(){return config.getInt("password.max.length");}
 
   public String getPhoneNumberRegex() {
     return config.getString("phone.number.regex");

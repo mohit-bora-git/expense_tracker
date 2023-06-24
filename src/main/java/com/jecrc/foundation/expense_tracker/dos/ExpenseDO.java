@@ -12,7 +12,7 @@ public class ExpenseDO {
   private Integer expenseType;
   private Double transactionAmount;
   private Integer transactionType;
-  private String remark;
+  private String description;
   private Long createdAt;
   private Long updatedAt;
 }

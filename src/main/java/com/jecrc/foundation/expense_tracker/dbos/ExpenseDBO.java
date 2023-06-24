@@ -14,7 +14,7 @@ public class ExpenseDBO {
   private Integer expenseType;
   private Double transactionAmount;
   private Integer transactionType;
-  private String remark;
+  private String description;
   private Timestamp createdAt;
   private Timestamp updatedAt;
 }

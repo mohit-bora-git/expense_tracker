@@ -21,6 +21,6 @@ public enum ExpenseCategory {
         return expenseCategory;
       }
     }
-    return null;
+    return OTHERS;
   }
 }

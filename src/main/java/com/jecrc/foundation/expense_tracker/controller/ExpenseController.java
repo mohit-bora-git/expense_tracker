@@ -3,13 +3,13 @@ package com.jecrc.foundation.expense_tracker.controller;
 import com.jecrc.foundation.expense_tracker.dos.ExpenseDO;
 import com.jecrc.foundation.expense_tracker.service.ExpenseService;
 import com.jecrc.foundation.expense_tracker.utils.StringUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/expense")
@@ -36,7 +36,7 @@ public class ExpenseController extends BaseController {
     return null;
   }
 
-  @PutMapping(value = "/update_expense", consumes = MediaType.APPLICATION_JSON_VALUE,
+  @PatchMapping(value = "/update_expense", consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public DeferredResult<?> updateExpense(@RequestParam("expenseId") Long expenseId,
       HttpServletRequest request) {

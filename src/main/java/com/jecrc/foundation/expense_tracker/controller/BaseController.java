@@ -13,8 +13,7 @@ public class BaseController {
   Logger logger = LoggerFactory.getLogger(BaseController.class);
 
   public DeferredResult<ResponseEntity<?>> getDeferredResult() {
-    DeferredResult<ResponseEntity<?>> deferredResult = new DeferredResult<>();
-    return null;
+    return new DeferredResult<>();
   }
 
   public void processDeferredResult(final DeferredResult<ResponseEntity<?>> df,

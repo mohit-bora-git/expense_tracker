@@ -21,8 +21,6 @@ public class TimeUtils {
   public static Long getCurrentTime(TimeUnit timeUnit) {
     long localTime = LocalTime.now().toNanoOfDay();
     switch (timeUnit) {
-      case NANOSECONDS:
-        return localTime;
       case MICROSECONDS:
         return localTime / 1_000L;
       case MILLISECONDS:
