@@ -18,36 +18,36 @@ import java.util.Set;
 
 @Configuration
 public class ConfiguratorInitializer {
-    Logger logger = LoggerFactory.getLogger(ConfiguratorInitializer.class);
+  Logger logger = LoggerFactory.getLogger(ConfiguratorInitializer.class);
 
-    @Value("${configurator.filename}")
-    private String configFileName;
+  @Value("${configurator.filename}")
+  private String configFileName;
 
-    @Value("${configurator.mode}")
-    private String configMode;
+  @Value("${configurator.mode}")
+  private String configMode;
 
-    private Set<String> supportedConfigModes;
-    private static final String CONFIG_MODE_JSON = "json";
+  private Set<String> supportedConfigModes;
+  private static final String CONFIG_MODE_JSON = "json";
 
-    @PostConstruct
-    public void init() {
-        this.supportedConfigModes = new HashSet<>();
-        this.supportedConfigModes.add(CONFIG_MODE_JSON);
+  @PostConstruct
+  public void init() {
+    this.supportedConfigModes = new HashSet<>();
+    this.supportedConfigModes.add(CONFIG_MODE_JSON);
+  }
+
+  @Bean
+  public Configurator configurator() throws FileNotFoundException, IOException {
+    if (StringUtils.isNullOrEmpty(configMode)) {
+      throw new ConfiguratorModeRequiredException();
     }
-
-    @Bean
-    public Configurator configurator() throws FileNotFoundException, IOException {
-        if (StringUtils.isNullOrEmpty(configMode)) {
-            throw new ConfiguratorModeRequiredException();
-        }
-        logger.info("Creating Configurator Bean for ConfigMode: {}, ConfigFileName: {}", configMode,
-            configFileName);
-        switch (configMode) {
-            case CONFIG_MODE_JSON:
-                return JsonFileConfigurator.builder().addFileName(configFileName).build();
-            default:
-                throw new InvalidConfiguratorModeException(
-                    "Configuration Mode " + configMode + " is invalid. Only " + this.supportedConfigModes.toString() + " are allowed.");
-        }
+    logger.info("Creating Configurator Bean for ConfigMode: {}, ConfigFileName: {}", configMode,
+        configFileName);
+    switch (configMode) {
+      case CONFIG_MODE_JSON:
+        return JsonFileConfigurator.builder().addFileName(configFileName).build();
+      default:
+        throw new InvalidConfiguratorModeException(
+            "Configuration Mode " + configMode + " is invalid. Only " + this.supportedConfigModes.toString() + " are allowed.");
     }
+  }
 }

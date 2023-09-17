@@ -7,21 +7,21 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 public class FileUtils {
-    private FileUtils() {
+  private FileUtils() {
 
-    }
+  }
 
-    public static String readFile(String fileLocation) throws IOException {
-        ClassPathResource resource = new ClassPathResource(fileLocation);
-        InputStream inputStream = resource.getInputStream();
-        StringBuilder textBuilder = new StringBuilder();
-        try (Reader reader = new BufferedReader(new InputStreamReader
-                (inputStream, StandardCharsets.UTF_8))) {
-            int c = 0;
-            while ((c = reader.read()) != -1) {
-                textBuilder.append((char) c);
-            }
-        }
-        return textBuilder.toString();
+  public static String readFile(String fileLocation) throws IOException {
+    ClassPathResource resource = new ClassPathResource(fileLocation);
+    InputStream inputStream = resource.getInputStream();
+    StringBuilder textBuilder = new StringBuilder();
+    try (Reader reader = new BufferedReader(
+        new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+      int c = 0;
+      while ((c = reader.read()) != -1) {
+        textBuilder.append((char) c);
+      }
     }
+    return textBuilder.toString();
+  }
 }

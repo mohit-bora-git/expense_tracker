@@ -1,6 +1,5 @@
 package com.jecrc.foundation.expense_tracker.config;
 
-import com.jecrc.foundation.expense_tracker.helper.ConfigPropertyService;
 import com.jecrc.foundation.expense_tracker.mapper.ExpenseMapper;
 import com.jecrc.foundation.expense_tracker.mapper.UserMapper;
 import com.jecrc.foundation.expense_tracker.utils.StringUtils;
@@ -17,9 +16,11 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import javax.sql.DataSource;
 
 @Configuration
-public class MySQLConfiguration {
+public class MySQLConfig {
+
   @Autowired
-  private ConfigPropertyService config;
+  private ConfigProps config;
+
   private DataSource dataSource;
 
   private void registerMappers(SqlSessionTemplate sqlSessionTemplate) {
@@ -30,14 +31,14 @@ public class MySQLConfiguration {
   }
 
   @Bean("sqlSessionTemplate")
-  public SqlSessionTemplate sqlSessionTemplateMaster() throws Exception {
+  public SqlSessionTemplate sqlSessionTemplate() throws Exception {
     dataSource = createDataSource(config.getMySQLDriver(), config.getMySQLUsername(),
-        config.getMySQLPassword(), config.getMySQLDBURI(), config.getMySQLActiveConnections(),
+        config.getMySQLPassword(), config.getMySQLDbUri(), config.getMySQLActiveConnections(),
         config.getMySQLMaxIdleConnections());
     SqlSessionFactory sqlSessionFactory = getSqlSessionFactory(dataSource);
-    SqlSessionTemplate sqlSessionTemplateMaster = new SqlSessionTemplate(sqlSessionFactory);
-    registerMappers(sqlSessionTemplateMaster);
-    return sqlSessionTemplateMaster;
+    SqlSessionTemplate sqlSessionTemplate = new SqlSessionTemplate(sqlSessionFactory);
+    registerMappers(sqlSessionTemplate);
+    return sqlSessionTemplate;
   }
 
   @Bean("mysqlTransaction")
@@ -51,6 +52,7 @@ public class MySQLConfiguration {
     org.apache.ibatis.session.Configuration configuration =
         new org.apache.ibatis.session.Configuration();
     configuration.setMapUnderscoreToCamelCase(true);
+    configuration.setUseGeneratedKeys(true);
     factoryBean.setConfiguration(configuration);
     return factoryBean.getObject();
   }

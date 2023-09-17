@@ -12,57 +12,56 @@ import java.util.List;
 
 public class JacksonUtils {
 
-    private static final Logger logger = LoggerFactory.getLogger(JacksonUtils.class);
+  private static final Logger logger = LoggerFactory.getLogger(JacksonUtils.class);
 
-    private static ObjectMapper objectMapper = new ObjectMapper();
+  private static ObjectMapper objectMapper = new ObjectMapper();
 
-    private JacksonUtils() {
+  private JacksonUtils() {
+  }
+
+  public static ObjectMapper getObjectMapper() {
+    return objectMapper;
+  }
+
+
+  public static String toJson(Object object) {
+    try {
+      return objectMapper.writeValueAsString(object);
+    } catch (JsonProcessingException e) {
+      logger.error("Exception while converting Object to JSON due to {}",
+          StringUtils.printStackTrace(e));
+      return null;
     }
+  }
 
-    public static ObjectMapper getObjectMapper() {
-        return objectMapper;
+  public static <T> T fromJson(String json, Class<T> cls) {
+    try {
+      return objectMapper.readValue(json, cls);
+    } catch (Exception e) {
+      logger.error("Exception while converting JSON to Object JSON: {} due to {}", json,
+          StringUtils.printStackTrace(e));
+      return null;
     }
+  }
 
-
-    public static String toJson(Object object) {
-        try {
-            return objectMapper.writeValueAsString(object);
-        } catch (JsonProcessingException e) {
-            logger.error("Exception while converting Object to JSON due to {}",
-                StringUtils.printStackTrace(e));
-            return null;
-        }
+  public static <T> T fromJson(String json, TypeReference<T> typeRef) {
+    try {
+      return objectMapper.readValue(json, typeRef);
+    } catch (Exception e) {
+      logger.error("Exception while converting JSON to Object JSON: {} due to {}", json,
+          StringUtils.printStackTrace(e));
+      return null;
     }
+  }
 
-    public static <T> T fromJson(String json, Class<T> cls) {
-        try {
-            return objectMapper.readValue(json, cls);
-        } catch (Exception e) {
-            logger.error("Exception while converting JSON to Object JSON: {} due to {}", json,
-                StringUtils.printStackTrace(e));
-            return null;
-        }
+  public static <T> List<T> fromJsonToList(String json, Class<T> cls) {
+    try {
+      return objectMapper.readValue(json, new TypeReference<List<T>>() {
+      });
+    } catch (Exception e) {
+      logger.info("Exception while converting JSON Array to List of Objects JSON: {} due to {}",
+          json, StringUtils.printStackTrace(e));
+      return new ArrayList<>();
     }
-
-    public static <T> T fromJson(String json, TypeReference<T> typeRef) {
-        try {
-            return objectMapper.readValue(json, typeRef);
-        } catch (Exception e) {
-            logger.error("Exception while converting JSON to Object JSON: {} due to {}", json,
-                StringUtils.printStackTrace(e));
-            return null;
-        }
-    }
-
-    public static <T> List<T> fromJsonToList(String json, Class<T> cls) {
-        try {
-            return objectMapper.readValue(json, new TypeReference<List<T>>() {
-            });
-        } catch (Exception e) {
-            logger.info(
-                "Exception while converting JSON Array to List of Objects JSON: {} due to {}", json,
-                StringUtils.printStackTrace(e));
-            return new ArrayList<>();
-        }
-    }
+  }
 }

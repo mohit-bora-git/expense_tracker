@@ -6,5 +6,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ExpenseValidator {
-    private static final Logger logger= LoggerFactory.getLogger(ExpenseValidator.class);
+  private static final Logger logger = LoggerFactory.getLogger(ExpenseValidator.class);
 }

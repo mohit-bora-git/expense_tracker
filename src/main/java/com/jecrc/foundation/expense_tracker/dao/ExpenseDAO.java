@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ExpenseDAO extends BaseDAO<ExpenseDBO>{
+public class ExpenseDAO extends BaseDAO<ExpenseDBO> {
   @Override
   public ExpenseDBO save(ExpenseDBO expenseDbo) {
     return null;

@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 public class UserDBO {
   private Long id;
   private String name;
-  private String nickName;
+  private String username;
   private String email;
   private String password;
   private Double transactionLimit;

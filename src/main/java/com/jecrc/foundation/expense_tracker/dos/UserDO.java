@@ -10,8 +10,10 @@ import lombok.NoArgsConstructor;
 public class UserDO {
   private Long id;
   private String name;
-  private String nickName;
+  private String username;
+  private String email;
   private String profileImageUrl;
+  private Double transactionLimit;
   private Long createdAt;
   private Long updatedAt;
 }

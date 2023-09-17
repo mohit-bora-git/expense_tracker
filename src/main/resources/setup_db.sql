@@ -5,7 +5,7 @@ USE expense_tracker;
 CREATE TABLE IF NOT EXISTS `users`(
     `id` BIGINT AUTO_INCREMENT,
     `name` VARCHAR(255),
-    `nick_name` VARCHAR(255),
+    `username` VARCHAR(255),
     `email` NOT NULL VARCHAR(255),
     `password` NOT NULL VARCHAR(255),
     `transaction_limit` DECIMAL,

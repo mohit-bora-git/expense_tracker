@@ -21,7 +21,7 @@ public class ExpenseController extends BaseController {
   @PostMapping(value = "/create_expense", consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public DeferredResult<?> createExpense(@RequestBody ExpenseDO expenseDo,
-      HttpServletRequest request) {
+      HttpServletRequest requestHeaders) {
     DeferredResult<ResponseEntity<?>> deferredResult = getDeferredResult();
     String apiEndPoint = "/v1/api/expense/create_expense";
     long startTime = System.currentTimeMillis();
@@ -39,14 +39,14 @@ public class ExpenseController extends BaseController {
   @PatchMapping(value = "/update_expense", consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public DeferredResult<?> updateExpense(@RequestParam("expenseId") Long expenseId,
-      HttpServletRequest request) {
+      HttpServletRequest requestHeaders) {
     DeferredResult<ResponseEntity<?>> deferredResult = getDeferredResult();
 
     return null;
   }
 
   @GetMapping(value = "/get_expenses", produces = MediaType.APPLICATION_JSON_VALUE)
-  public DeferredResult<?> getExpenses(HttpServletRequest request) {
+  public DeferredResult<?> getExpenses(HttpServletRequest requestHeaders) {
     DeferredResult<ResponseEntity<?>> deferredResult = getDeferredResult();
 
     return null;
