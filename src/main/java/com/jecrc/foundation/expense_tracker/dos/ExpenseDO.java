@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,6 +15,7 @@ public class ExpenseDO {
   private Double transactionAmount;
   private Integer transactionType;
   private String description;
+  private Date date;
   private Long createdAt;
   private Long updatedAt;
 }

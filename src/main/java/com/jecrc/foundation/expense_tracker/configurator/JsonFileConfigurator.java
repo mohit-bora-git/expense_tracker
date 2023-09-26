@@ -76,7 +76,6 @@ public class JsonFileConfigurator implements Configurator {
     return StringUtils.convertToBoolean(this.configMap.get(property));
   }
 
-
   static class Builder {
     private String fileName;
     private Map<String, String> configMap;
@@ -87,7 +86,7 @@ public class JsonFileConfigurator implements Configurator {
     }
 
     @SuppressWarnings("unchecked")
-    public JsonFileConfigurator build() throws IOException, FileNotFoundException {
+    public JsonFileConfigurator build() throws IOException {
       if (fileName == null || fileName.length() == 0) {
         throw new FileNotFoundException("Configuration file " + fileName + " not provided.");
       }

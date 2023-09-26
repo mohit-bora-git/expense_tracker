@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Data
@@ -15,6 +16,7 @@ public class ExpenseDBO {
   private Double transactionAmount;
   private Integer transactionType;
   private String description;
+  private Date date;
   private Timestamp createdAt;
   private Timestamp updatedAt;
 }

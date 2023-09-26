@@ -29,5 +29,13 @@
   "access.token.max.life": "864000000",
   "jwt.issuer": "expense_tracker.com",
   "jwt.auth.subject": "auth",
-  "profile.pic.base.url": "http://localhost:8080/phuga/images/"
+
+  "mail.host": "smtp.gmail.com",
+  "mail.port": 587,
+  "mail.username": "mohitbora1225@gmail.com",
+  "mail.password": "mohitboracoder",
+  "mail.transport.protocol": "smtp",
+  "mail.smtp.auth":true,
+  "mail.smtp.starttls.enable": true
+
 }

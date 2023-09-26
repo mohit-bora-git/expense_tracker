@@ -1,16 +1,14 @@
 package com.jecrc.foundation.expense_tracker.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 public class BaseController {
-
-  Logger logger = LoggerFactory.getLogger(BaseController.class);
 
   public DeferredResult<ResponseEntity<?>> getDeferredResult() {
     return new DeferredResult<>();
@@ -19,7 +17,7 @@ public class BaseController {
   public void processDeferredResult(final DeferredResult<ResponseEntity<?>> df,
       CompletableFuture<ResponseEntity<?>> cf, String apiEndPoint, Long startTime, String reqId) {
     df.onCompletion(
-        () -> logger.info("Request processed apiEndPoint: {}, reqID: {}, execTime: {}", apiEndPoint,
+        () -> log.info("Request processed apiEndPoint: {}, reqID: {}, execTime: {}", apiEndPoint,
             reqId, System.currentTimeMillis() - startTime));
     cf.thenAccept(result -> {
       if (df.hasResult()) {

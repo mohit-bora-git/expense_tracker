@@ -31,4 +31,14 @@ public class PropertyConstants {
   public static final String JWT_AUTH_SUBJECT = "jwt.auth.subject";
   public static final String JWT_ISSUER = "jwt.issuer";
   public static final String JWT_SECRET_KEY = "jwt.secret.key";
+
+  /*********************************MAIL CONSTANTS*********************************/
+
+  public static final String MAIL_HOST = "mail.host";
+  public static final String MAIL_PORT = "mail.port";
+  public static final String MAIL_USERNAME = "mail.username";
+  public static final String MAIL_PASSWORD = "mail.password";
+  public static final String MAIL_TRANSPORT_PROTOCOL = "mail.transport.protocol";
+  public static final String MAIL_SMTP_AUTH = "mail.smtp.auth";
+  public static final String MAIL_SMTP_STARTTLS_ENABLE = "mail.smtp.starttls.enable";
 }

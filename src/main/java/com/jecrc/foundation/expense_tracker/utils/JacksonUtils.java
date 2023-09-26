@@ -6,9 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class JacksonUtils {
 
@@ -51,17 +48,6 @@ public class JacksonUtils {
       logger.error("Exception while converting JSON to Object JSON: {} due to {}", json,
           StringUtils.printStackTrace(e));
       return null;
-    }
-  }
-
-  public static <T> List<T> fromJsonToList(String json, Class<T> cls) {
-    try {
-      return objectMapper.readValue(json, new TypeReference<List<T>>() {
-      });
-    } catch (Exception e) {
-      logger.info("Exception while converting JSON Array to List of Objects JSON: {} due to {}",
-          json, StringUtils.printStackTrace(e));
-      return new ArrayList<>();
     }
   }
 }

@@ -19,13 +19,14 @@ CREATE TABLE IF NOT EXISTS `users`(
 
 CREATE TABLE IF NOT EXISTS `expenses`(
     `id` BIGINT AUTO_INCREMENT,
-    `expense_type` NOT NULL INT,
-    `transaction_amount` NOT NULL DECIMAL,
-    `transaction_type` NOT NULL INT,
+    `date` DATE NOT NULL,
+    `expense_type` INT NOT NULL,
+    `transaction_amount` DECIMAL NOT NULL,
+    `transaction_type` INT NOT NULL,
     `description` text,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `user_id` NOT NULL BIGINT
+    `user_id` BIGINT NOT NULL,
     PRIMARY KEY(`id`),
     FOREIGN KEY(`user_id`) REFERENCES `users`(`id`)
 )

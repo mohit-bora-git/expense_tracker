@@ -13,8 +13,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +22,8 @@ import java.util.Base64;
 import java.util.Date;
 
 @Service
+@Slf4j
 public class AccessTokenService {
-  private static final Logger logger = LoggerFactory.getLogger(AccessTokenService.class);
 
   @Autowired
   private ConfigProps config;
@@ -43,7 +42,7 @@ public class AccessTokenService {
 
   public UserDO verifyAccessToken(HttpServletRequest request) {
     String authorizationHeader = request.getHeader("Authorization");
-    logger.debug("accessToken: {}", authorizationHeader);
+    log.debug("accessToken: {}", authorizationHeader);
     if (StringUtils.isNullOrEmpty(authorizationHeader)) {
       throw new TokenAuthorizationFailedException(
           HttpResponseErrorCode.AUTHORIZATION_HEADER_IS_MISSING,

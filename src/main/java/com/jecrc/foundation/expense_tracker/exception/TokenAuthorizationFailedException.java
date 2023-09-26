@@ -1,8 +1,21 @@
 package com.jecrc.foundation.expense_tracker.exception;
 
-public class TokenAuthorizationFailedException extends HttpStatusException{
+public class TokenAuthorizationFailedException extends RuntimeException{
 
-  public TokenAuthorizationFailedException(Integer code,String message){
-    super(code,message);
+  private final Integer code;
+  private final String message;
+
+  public TokenAuthorizationFailedException(Integer code, String message) {
+    this.code = code;
+    this.message = message;
+  }
+
+  public Integer getCode() {
+    return code;
+  }
+
+  @Override
+  public String getMessage() {
+    return message;
   }
 }
