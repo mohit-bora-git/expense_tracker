@@ -9,7 +9,6 @@ import com.jecrc.foundation.expense_tracker.helper_service.AccessTokenService;
 import com.jecrc.foundation.expense_tracker.service.ExpenseService;
 import com.jecrc.foundation.expense_tracker.utils.StringUtils;
 import com.jecrc.foundation.expense_tracker.validator.ExpenseValidator;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -17,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.CompletableFuture;
 
 
@@ -137,8 +137,8 @@ public class ExpenseController extends BaseController {
     return df;
   }
 
-  @GetMapping(value = "/get_expenses", produces = MediaType.APPLICATION_JSON_VALUE)
-  public DeferredResult<ResponseEntity<?>> getRangeExpense(@RequestParam("startDate") Long date,
+  @GetMapping(value = "/expense_by_date", produces = MediaType.APPLICATION_JSON_VALUE)
+  public DeferredResult<ResponseEntity<?>> getExpenseByDate(@RequestParam("startDate") Long date,
       HttpServletRequest request) {
     DeferredResult<ResponseEntity<?>> df = getDeferredResult();
     String apiEndPoint = "/get_expense";

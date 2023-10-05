@@ -1,8 +1,9 @@
 package com.jecrc.foundation.expense_tracker.encryptor;
 
-import jakarta.annotation.PostConstruct;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.context.annotation.Configuration;
+
+import javax.annotation.PostConstruct;
 
 @Configuration
 public class Encryptor {

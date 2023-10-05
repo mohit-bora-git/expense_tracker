@@ -7,14 +7,13 @@ import com.jecrc.foundation.expense_tracker.dos.SignInDO;
 import com.jecrc.foundation.expense_tracker.dos.SignUpDO;
 import com.jecrc.foundation.expense_tracker.exception.ValidationException;
 import com.jecrc.foundation.expense_tracker.utils.ValidationUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class UserValidator {
-  private static final Logger logger = LoggerFactory.getLogger(UserValidator.class);
 
   @Autowired
   private ConfigProps config;

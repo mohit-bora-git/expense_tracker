@@ -10,7 +10,6 @@ import com.jecrc.foundation.expense_tracker.helper_service.AccessTokenService;
 import com.jecrc.foundation.expense_tracker.service.UserService;
 import com.jecrc.foundation.expense_tracker.utils.StringUtils;
 import com.jecrc.foundation.expense_tracker.validator.UserValidator;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.CompletableFuture;
 
 @RestController

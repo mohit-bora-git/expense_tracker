@@ -26,6 +26,5 @@
   "secret.key": "eyJhbGciOiJIUzUxMiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY5NjQ5NTM4NywiaWF0IjoxNjk2NDk1Mzg3fQ.22NcFbeK4ZSrpiwPRtHzoMiroalzJ9KpJ9nT9PxvrLAS4FI6z1XTlLxA0pRqCFBRjE_lc2SUI7zi-BD3LzNZGQ",
   "access.token.max.life": "864000000",
   "jwt.issuer": "expense_tracker.com",
-  "jwt.auth.subject": "auth",
-
+  "jwt.auth.subject": "auth"
 }
