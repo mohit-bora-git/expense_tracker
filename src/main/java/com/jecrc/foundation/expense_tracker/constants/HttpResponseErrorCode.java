@@ -1,5 +1,7 @@
 package com.jecrc.foundation.expense_tracker.constants;
 
+import javax.swing.plaf.PanelUI;
+
 public class HttpResponseErrorCode {
   private HttpResponseErrorCode() {
   }
@@ -11,5 +13,11 @@ public class HttpResponseErrorCode {
   public static final Integer AUTHORIZATION_HEADER_IS_MISSING = 1005;
   public static final Integer INVALID_AUTHORIZATION_HEADER = 1006;
   public static final Integer TOKEN_EXPIRED_OR_INVALID = 1007;
+  public static final Integer USER_WITH_MAIL_ALREADY_EXISTS = 1008;
+  public static final Integer USER_NOT_FOUND = 1009;
+  public static final Integer INCORRECT_CREDENTIALS = 1010;
+  public static final Integer EXPENSE_NOT_FOUND = 1011;
+  public static final Integer USERNAME_ALREADY_EXISTS = 1012;
+
 
 }

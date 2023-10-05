@@ -7,18 +7,18 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class Encryptor {
 
-    private StrongPasswordEncryptor strongPasswordEncryptor;
+  private StrongPasswordEncryptor strongPasswordEncryptor;
 
-    @PostConstruct
-    public void init() {
-        this.strongPasswordEncryptor = new StrongPasswordEncryptor();
-    }
+  @PostConstruct
+  public void init() {
+    this.strongPasswordEncryptor = new StrongPasswordEncryptor();
+  }
 
-    public String getEncryptedPassword(String password) {
-        return strongPasswordEncryptor.encryptPassword(password);
-    }
+  public String getEncryptedPassword(String password) {
+    return strongPasswordEncryptor.encryptPassword(password);
+  }
 
-    public boolean checkEncryptedPassword(String password, String encryptedPassword) {
-        return strongPasswordEncryptor.checkPassword(password, encryptedPassword);
-    }
+  public boolean checkEncryptedPassword(String password, String encryptedPassword) {
+    return strongPasswordEncryptor.checkPassword(password, encryptedPassword);
+  }
 }

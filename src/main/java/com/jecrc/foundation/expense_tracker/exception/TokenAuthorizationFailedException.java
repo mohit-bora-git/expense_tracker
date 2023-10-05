@@ -1,6 +1,6 @@
 package com.jecrc.foundation.expense_tracker.exception;
 
-public class TokenAuthorizationFailedException extends RuntimeException{
+public class TokenAuthorizationFailedException extends RuntimeException {
 
   private final Integer code;
   private final String message;

@@ -2,34 +2,34 @@ package com.jecrc.foundation.expense_tracker.dao;
 
 import com.jecrc.foundation.expense_tracker.dbos.UserDBO;
 import com.jecrc.foundation.expense_tracker.mapper.UserMapper;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserDAO extends BaseDAO<UserDBO> {
+public class UserDAO {
+
+  @Autowired
+  private SqlSessionTemplate sqlSessionTemplate;
 
   private UserMapper getUserMapper() {
     return sqlSessionTemplate.getMapper(UserMapper.class);
   }
 
-  @Override
-  public UserDBO save(UserDBO user) {
+  public void save(UserDBO user) {
     getUserMapper().save(user);
-    return user;
   }
 
-  @Override
-  public Integer update(UserDBO userDbo) {
-    return getUserMapper().update(userDbo);
+  public void update(UserDBO userDbo) {
+    getUserMapper().update(userDbo);
   }
 
-  @Override
   public UserDBO findById(Long id) {
     return getUserMapper().findById(id);
   }
 
-  @Override
   public List<UserDBO> findAll() {
     return getUserMapper().findAll();
   }

@@ -97,32 +97,4 @@ public class ConfigProps {
     return config.getString(PropertyConstants.JWT_SECRET_KEY).getBytes();
   }
 
-  /************************************MAIL CONFIGS**************************************/
-
-  public String getMailHost(){
-    return config.getString(PropertyConstants.MAIL_HOST);
-  }
-
-  public Integer getMailPort(){
-    return config.getInt(PropertyConstants.MAIL_PORT);
-  }
-
-  public String getMailUsername(){
-    return config.getString(PropertyConstants.MAIL_USERNAME);
-  }
-
-  public String getMailPassword(){
-    return config.getString(PropertyConstants.MAIL_PASSWORD);
-  }
-  public String getMailTransportProtocol(){
-    return config.getString(PropertyConstants.MAIL_TRANSPORT_PROTOCOL);
-  }
-
-  public Boolean getMailSmtpAuth(){
-    return config.getBoolean(PropertyConstants.MAIL_SMTP_AUTH);
-  }
-
-  public Boolean getMailSmtpStartTlsEnabled(){
-    return config.getBoolean(PropertyConstants.MAIL_SMTP_STARTTLS_ENABLE);
-  }
 }

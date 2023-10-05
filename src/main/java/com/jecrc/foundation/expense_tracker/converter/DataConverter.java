@@ -1,6 +1,8 @@
 package com.jecrc.foundation.expense_tracker.converter;
 
+import com.jecrc.foundation.expense_tracker.dbos.ExpenseDBO;
 import com.jecrc.foundation.expense_tracker.dbos.UserDBO;
+import com.jecrc.foundation.expense_tracker.dos.ExpenseDO;
 import com.jecrc.foundation.expense_tracker.dos.SignUpDO;
 import com.jecrc.foundation.expense_tracker.dos.UserDO;
 
@@ -30,10 +32,34 @@ public class DataConverter {
     return userDbo;
   }
 
-  public static UserDBO convertSignUpDoToUserDbo(SignUpDO signUpDo){
-    UserDBO userDbo=new UserDBO();
+  public static UserDBO convertSignUpDoToUserDbo(SignUpDO signUpDo) {
+    UserDBO userDbo = new UserDBO();
     userDbo.setEmail(signUpDo.getEmail());
     userDbo.setPassword(signUpDo.getPassword());
     return userDbo;
+  }
+
+  public static ExpenseDBO convertExpenseDoToExpenseDbo(ExpenseDO expenseDO, Long id) {
+    ExpenseDBO expenseDBO = new ExpenseDBO();
+    expenseDBO.setTransactionAmount(expenseDO.getTransactionAmount());
+    expenseDBO.setDate(expenseDO.getDate());
+    expenseDBO.setExpenseType(expenseDO.getExpenseType());
+    expenseDBO.setTransactionType(expenseDO.getTransactionType());
+    expenseDBO.setDescription(expenseDO.getDescription());
+    expenseDBO.setUserId(id);
+    return expenseDBO;
+  }
+
+  public static ExpenseDO convertExpenseDboToExpenseDo(ExpenseDBO expenseDBO) {
+    ExpenseDO expenseDO = new ExpenseDO();
+    expenseDO.setId(expenseDBO.getId());
+    expenseDO.setTransactionAmount(expenseDBO.getTransactionAmount());
+    expenseDO.setDate(expenseDBO.getDate());
+    expenseDO.setExpenseType(expenseDBO.getExpenseType());
+    expenseDO.setTransactionType(expenseDBO.getTransactionType());
+    expenseDO.setDescription(expenseDBO.getDescription());
+    expenseDO.setCreatedAt(expenseDBO.getCreatedAt().getTime());
+    expenseDO.setUpdatedAt(expenseDBO.getUpdatedAt().getTime());
+    return expenseDO;
   }
 }

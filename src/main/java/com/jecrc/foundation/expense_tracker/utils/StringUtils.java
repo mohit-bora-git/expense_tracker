@@ -1,7 +1,5 @@
 package com.jecrc.foundation.expense_tracker.utils;
 
-import java.text.MessageFormat;
-import java.util.IllegalFormatException;
 import java.util.UUID;
 
 public class StringUtils {
@@ -43,18 +41,6 @@ public class StringUtils {
     return Double.parseDouble(string);
   }
 
-  /**
-   * Format String with template and value given.
-   *
-   * @param template String template which the value would be furnished with.
-   * @param value    The value to be furnished with.
-   * @return Formatted string with the given value.
-   * @throws IllegalFormatException on an illegal template format given.
-   */
-  public static String formatString(String template, Integer value) throws IllegalFormatException {
-    return MessageFormat.format(template, value);
-  }
-
   public static String printStackTrace(Exception e) {
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append("Exception: ").append(e.getMessage()).append("\n\t");
@@ -68,7 +54,4 @@ public class StringUtils {
     return Boolean.parseBoolean(string);
   }
 
-  public static String generateRandomString() {
-    return UUID.randomUUID().toString().replace("-", "");
-  }
 }

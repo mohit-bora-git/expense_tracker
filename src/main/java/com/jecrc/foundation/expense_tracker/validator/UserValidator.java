@@ -19,12 +19,15 @@ public class UserValidator {
   @Autowired
   private ConfigProps config;
 
+  //TODO:more validators needed for various field
+
   public void validateSignUpDo(SignUpDO signUpDo) {
     if (signUpDo == null || signUpDo.getEmail() == null || signUpDo.getPassword() == null) {
       throw new ValidationException(HttpResponseErrorCode.INVALID_REQUEST_BODY,
           HttpResponseErrorMessage.INVALID_REQUEST_BODY);
     } else if (validateEmail(signUpDo.getEmail())) {
-      throw new ValidationException(HttpResponseErrorCode.INVALID_EMAIL, HttpResponseErrorMessage.INVALID_EMAIL);
+      throw new ValidationException(HttpResponseErrorCode.INVALID_EMAIL,
+          HttpResponseErrorMessage.INVALID_EMAIL);
     } else if (validatePassword(signUpDo.getPassword())) {
       throw new ValidationException(HttpResponseErrorCode.INVALID_PASSWORD,
           HttpResponseErrorMessage.INVALID_PASSWORD);
@@ -42,7 +45,7 @@ public class UserValidator {
   }
 
   public void validateSignInDo(SignInDO signInDo) {
-    if (signInDo == null || signInDo.getUsernameOrEmail() == null || signInDo.getPassword() == null) {
+    if (signInDo == null || signInDo.getEmail() == null || signInDo.getPassword() == null) {
       throw new ValidationException(HttpResponseErrorCode.INVALID_REQUEST_BODY,
           HttpResponseErrorMessage.INVALID_REQUEST_BODY);
     }

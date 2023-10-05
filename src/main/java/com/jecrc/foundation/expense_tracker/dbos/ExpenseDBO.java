@@ -17,6 +17,7 @@ public class ExpenseDBO {
   private Integer transactionType;
   private String description;
   private Date date;
+  private Long userId;
   private Timestamp createdAt;
   private Timestamp updatedAt;
 }
