@@ -32,4 +32,6 @@ public class PropertyConstants {
   public static final String JWT_ISSUER = "jwt.issuer";
   public static final String JWT_SECRET_KEY = "jwt.secret.key";
 
+  /*********************************GENERAL CONSTANTS*********************************/
+  public static final String APP_EMAIL="app.email";
 }

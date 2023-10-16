@@ -27,11 +27,11 @@ public interface UserMapper {
   UserDBO findByUsername(String username);
 
   @Update("UPDATE users SET name=#{name}, username=#{username} WHERE id=#{id}")
-  int update(UserDBO userDbo);
+  void update(UserDBO userDbo);
 
   @Update("UPDATE users SET profile_image_url=#{profileImageUrl} WHERE id=#{id}")
-  int updateProfileImage(Long id, String imageUrl);
+  void updateProfileImage(Long id, String imageUrl);
 
   @Update("UPDATE users SET transaction_limit=#{limit} WHERE id=#{id}")
-  int updateTransactionLimit(Long id, Double limit);
+  void updateTransactionLimit(Long id, Double limit);
 }

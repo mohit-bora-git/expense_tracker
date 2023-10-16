@@ -27,6 +27,9 @@ public interface ExpenseMapper {
   @Select("SELECT * FROM expense WHERE id=#{id} ORDER BY create_at DESC")
   ExpenseDBO findById(Long id);
 
+  @Select("SELECT SUM(transaction_amount) FROM expense GROUP BY (user_id) HAVING user_id=#{id} AND date BETWEEN #{startDate} AND #{endDate}")
+  Double findTotalMonthlyExpense(Long id,Date startDate,Date endDate);
+
   @Delete("DELETE FROM expense WHERE id=#{id}")
   void delete(Long id);
 }

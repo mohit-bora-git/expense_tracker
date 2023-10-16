@@ -4,7 +4,7 @@ import java.util.Random;
 import java.util.UUID;
 
 public class RandomizerUtils {
-  private static Random random = new Random();
+  private static final Random random = new Random();
   private static int leftLimit = '0';
   private static int rightLimit = '9';
 
@@ -16,10 +16,5 @@ public class RandomizerUtils {
     }
     return buffer.toString();
   }
-
-  public static String getUUIDString() {
-    return UUID.randomUUID().toString();
-  }
-
 
 }

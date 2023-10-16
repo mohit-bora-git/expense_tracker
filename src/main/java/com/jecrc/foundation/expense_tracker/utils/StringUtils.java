@@ -1,7 +1,5 @@
 package com.jecrc.foundation.expense_tracker.utils;
 
-import java.util.UUID;
-
 public class StringUtils {
   private StringUtils() {
   }

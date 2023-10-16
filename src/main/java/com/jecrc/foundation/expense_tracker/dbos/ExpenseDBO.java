@@ -1,6 +1,7 @@
 package com.jecrc.foundation.expense_tracker.dbos;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.sql.Timestamp;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ExpenseDBO {
   private Long id;
   private Integer expenseType;

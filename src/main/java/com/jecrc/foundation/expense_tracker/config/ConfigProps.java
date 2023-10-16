@@ -79,6 +79,10 @@ public class ConfigProps {
     return config.getString("profile.picture.storage.location");
   }
 
+  public String getAppEmail(){
+    return config.getString(PropertyConstants.APP_EMAIL);
+  }
+
   /************************************JSON WEB TOKEN CONFIGS**************************************/
 
   public Long getAccessTokenMaxLife() {

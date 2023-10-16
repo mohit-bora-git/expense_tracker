@@ -7,6 +7,7 @@ import com.jecrc.foundation.expense_tracker.dos.ExpenseDO;
 import com.jecrc.foundation.expense_tracker.dos.UserDO;
 import com.jecrc.foundation.expense_tracker.helper_service.AccessTokenService;
 import com.jecrc.foundation.expense_tracker.service.ExpenseService;
+import com.jecrc.foundation.expense_tracker.utils.DateTimeUtils;
 import com.jecrc.foundation.expense_tracker.utils.StringUtils;
 import com.jecrc.foundation.expense_tracker.validator.ExpenseValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +47,7 @@ public class ExpenseController extends BaseController {
       CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
       UserDO user = accessTokenService.verifyAccessToken(request);
       //validate expense
-      expenseService.createExpense(user.getId(), expenseDo, cf);
+      expenseService.createExpense(user, expenseDo, cf);
       processDeferredResult(df, cf, apiEndPoint, startTime, reqId);
     } catch (Exception e) {
       log.error("Create expense request for createExpense failed due to : {}",
@@ -68,7 +69,7 @@ public class ExpenseController extends BaseController {
     try {
       CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
       UserDO user = accessTokenService.verifyAccessToken(request);
-      expenseService.updateExpense(user.getId(), expenseDO, cf);
+      expenseService.updateExpense(user, expenseDO, cf);
       processDeferredResult(df, cf, apiEndPoint, startTime, reqId);
     } catch (Exception e) {
       log.error("Update expense request failed due to : {}", StringUtils.printStackTrace(e));
@@ -147,7 +148,7 @@ public class ExpenseController extends BaseController {
     try {
       CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
       UserDO user = accessTokenService.verifyAccessToken(request);
-      expenseService.getExpenseByDate(user.getId(), date, cf);
+      expenseService.getExpenseByDate(user.getId(), DateTimeUtils.getISTTimeInMillis(date), cf);
       processDeferredResult(df, cf, apiEndPoint, startTime, reqId);
     } catch (Exception e) {
       log.error("Get range expense request failed due to : {}", StringUtils.printStackTrace(e));
@@ -168,7 +169,8 @@ public class ExpenseController extends BaseController {
     try {
       CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
       UserDO user = accessTokenService.verifyAccessToken(request);
-      expenseService.getRangeExpense(user.getId(), startDate, endDate, cf);
+      expenseService.getRangeExpense(user.getId(), DateTimeUtils.getISTTimeInMillis(startDate),
+          DateTimeUtils.getISTTimeInMillis(endDate), cf);
       processDeferredResult(df, cf, apiEndPoint, startTime, reqId);
     } catch (Exception e) {
       log.error("Get range expense request failed due to : {}", StringUtils.printStackTrace(e));

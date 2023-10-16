@@ -75,8 +75,7 @@ public class UserController extends BaseController {
     return df;
   }
 
-  @GetMapping(value = "/get", consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
-      produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
   public DeferredResult<ResponseEntity<?>> getUser(HttpServletRequest request) {
     DeferredResult<ResponseEntity<?>> df = getDeferredResult();
     CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
@@ -119,7 +118,7 @@ public class UserController extends BaseController {
   @PostMapping(value = "/upload_image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public DeferredResult<ResponseEntity<?>> uploadUserProfileImage(
-      @RequestPart(value = "profileImage") MultipartFile profileImage, HttpServletRequest request) {
+      @RequestBody MultipartFile profileImage, HttpServletRequest request) {
     DeferredResult<ResponseEntity<?>> df = getDeferredResult();
     CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
     String apiEndPoint = "/api/user/upload_image";
@@ -128,6 +127,27 @@ public class UserController extends BaseController {
       log.info("Request received for uploading the users profile");
       UserDO user = accessTokenService.verifyAccessToken(request);
       //TODO:create service for upload user profile (integrate AWS S3 or GCP)
+      processDeferredResult(df, cf, apiEndPoint, System.currentTimeMillis(), reqId);
+    } catch (Exception e) {
+      log.error("Error occurred due to : {}", StringUtils.printStackTrace(e));
+      df.setResult(ResponseEntity.ok(new ApiResponse<>(HttpResponseErrorCode.ERROR_OCCURRED,
+          HttpResponseErrorMessage.ERROR_OCCURRED)));
+    }
+    return df;
+  }
+
+  @PostMapping(value = "/update_transaction_limit", consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public DeferredResult<ResponseEntity<?>> updateTransactionLimit(UserDO userDO,
+      HttpServletRequest request) {
+    DeferredResult<ResponseEntity<?>> df = getDeferredResult();
+    CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
+    String apiEndPoint = "/api/user/update_transaction_limit";
+    String reqId = generateReqID();
+    try {
+      log.info("Request received for uploading the users profile");
+      UserDO user = accessTokenService.verifyAccessToken(request);
+      userService.updateTransactionLimit(user.getId(), userDO.getTransactionLimit(), cf);
       processDeferredResult(df, cf, apiEndPoint, System.currentTimeMillis(), reqId);
     } catch (Exception e) {
       log.error("Error occurred due to : {}", StringUtils.printStackTrace(e));

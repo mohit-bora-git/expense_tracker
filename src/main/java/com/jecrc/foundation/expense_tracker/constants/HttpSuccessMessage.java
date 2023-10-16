@@ -10,4 +10,5 @@ public class HttpSuccessMessage {
   public static final String USER_SUCCESSFULLY_UPLOADED_PROFILE_PIC =
       "User Successfully Uploaded the pic";
   public static final String USER_SUCCESSFULLY_UPDATED = "User Successfully Updated";
+  public static final String TRANSACTION_LIMIT_SUCCESSFULLY_UPDATED="Transaction Limit Successfully Updated";
 }

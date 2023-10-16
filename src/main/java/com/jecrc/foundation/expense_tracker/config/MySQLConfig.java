@@ -41,18 +41,12 @@ public class MySQLConfig {
     return sqlSessionTemplate;
   }
 
-  @Bean("mysqlTransaction")
-  public DataSourceTransactionManager transactionManager() {
-    return new DataSourceTransactionManager(dataSource);
-  }
-
   private SqlSessionFactory getSqlSessionFactory(DataSource dataSource) throws Exception {
     SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
     factoryBean.setDataSource(dataSource);
     org.apache.ibatis.session.Configuration configuration =
         new org.apache.ibatis.session.Configuration();
     configuration.setMapUnderscoreToCamelCase(true);
-    configuration.setUseGeneratedKeys(true);
     factoryBean.setConfiguration(configuration);
     return factoryBean.getObject();
   }

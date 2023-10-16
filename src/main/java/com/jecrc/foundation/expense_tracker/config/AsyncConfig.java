@@ -11,8 +11,22 @@ public class AsyncConfig {
   @Autowired
   private ConfigProps config;
 
-  @Bean(name = "asyncExecutor")
+  public static final String API_EXECUTOR="asyncExecutor";
+  public static final String TASK_EXECUTOR="asyncExecutor";
+
+  @Bean(name = API_EXECUTOR)
   public ThreadPoolTaskExecutor asyncExecutor() {
+    ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+    threadPoolTaskExecutor.setMaxPoolSize(config.getAsyncThreadPoolMaxPoolSize());
+    threadPoolTaskExecutor.setCorePoolSize(config.getAsyncThreadpoolCorePoolSize());
+    threadPoolTaskExecutor.setQueueCapacity(config.getAsyncThreadPoolQueueCapacity());
+    threadPoolTaskExecutor.setAwaitTerminationSeconds(
+        config.getAsyncThreadPoolAwaitTerminationSeconds());
+    return threadPoolTaskExecutor;
+  }
+
+  @Bean(name = TASK_EXECUTOR)
+  public ThreadPoolTaskExecutor taskExecutor() {
     ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
     threadPoolTaskExecutor.setMaxPoolSize(config.getAsyncThreadPoolMaxPoolSize());
     threadPoolTaskExecutor.setCorePoolSize(config.getAsyncThreadpoolCorePoolSize());
