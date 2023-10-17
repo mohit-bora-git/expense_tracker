@@ -25,6 +25,9 @@ public class PropertyConstants {
   public static final String PASSWORD_MIN_LENGTH = "password.min.length";
   public static final String PASSWORD_MAX_LENGTH = "password.max.length";
   public static final String EMAIL_REGEXP = "email.regex";
+  public static final String AWS_S3_BUCKET_NAME="aws.s3.bucket.name";
+  public static final String AWS_S3_HOST="aws.s3.host";
+  public static final String PROFILE_IMAGE_PREFIX_NAME="profile.image.prefix.name";
 
   /*********************************JSON WEB TOKEN CONSTANTS*********************************/
   public static final String JWT_ACCESS_TOKEN_MAX_LIFE = "jwt.access.token.max.life";

@@ -15,13 +15,7 @@
   "email.regex": "[a-zA-Z0-9][a-zA-Z0-9_.]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+$",
   "password.min.length": "8",
   "password.max.length": "15",
-  "name.max.length": "50",
   "email.masking.regex": "(?<=.{3}).(?=[^@]*?@)",
-  "username.min.length": "5",
-  "username.max.length": "50",
-  "username.regex": "[a-zA-Z0-9._]*",
-  "username.min.alphabet.count": "3",
-  "name.regex": "^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$",
 
   "secret.key": "eyJhbGciOiJIUzUxMiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY5NjQ5NTM4NywiaWF0IjoxNjk2NDk1Mzg3fQ.22NcFbeK4ZSrpiwPRtHzoMiroalzJ9KpJ9nT9PxvrLAS4FI6z1XTlLxA0pRqCFBRjE_lc2SUI7zi-BD3LzNZGQ",
   "access.token.max.life": "864000000",

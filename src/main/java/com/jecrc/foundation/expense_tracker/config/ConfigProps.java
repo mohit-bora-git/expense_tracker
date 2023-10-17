@@ -75,8 +75,16 @@ public class ConfigProps {
     return config.getString(PropertyConstants.EMAIL_REGEXP);
   }
 
-  public String getProfilePictureStorageLocation() {
-    return config.getString("profile.picture.storage.location");
+  public String getAwsS3BucketName() {
+    return config.getString(PropertyConstants.AWS_S3_BUCKET_NAME);
+  }
+
+  public String getAwsS3Host(){
+    return config.getString(PropertyConstants.AWS_S3_HOST);
+  }
+
+  public String getProfileImagePrefixName(){
+    return config.getString(PropertyConstants.PROFILE_IMAGE_PREFIX_NAME);
   }
 
   public String getAppEmail(){

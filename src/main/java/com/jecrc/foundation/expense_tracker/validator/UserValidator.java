@@ -8,6 +8,7 @@ import com.jecrc.foundation.expense_tracker.dos.SignUpDO;
 import com.jecrc.foundation.expense_tracker.exception.ValidationException;
 import com.jecrc.foundation.expense_tracker.utils.ValidationUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,4 +50,5 @@ public class UserValidator {
           HttpResponseErrorMessage.INVALID_REQUEST_BODY);
     }
   }
+
 }

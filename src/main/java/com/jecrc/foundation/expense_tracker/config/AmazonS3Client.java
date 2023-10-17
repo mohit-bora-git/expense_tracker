@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,8 +28,8 @@ public class AmazonS3Client {
     log.info("AmazonS3Client Configured");
   }
 
-  public void uploadImageToS3bucket(String bucketName, String fileName, MultipartFile image)
-      throws IOException {
+  @SneakyThrows
+  public void uploadImageToS3bucket(String bucketName, String fileName, MultipartFile image) {
     amazonS3.putObject(
         new PutObjectRequest(bucketName, fileName, image.getInputStream(), new ObjectMetadata()));
   }

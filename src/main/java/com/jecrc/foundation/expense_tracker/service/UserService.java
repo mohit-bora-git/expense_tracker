@@ -1,6 +1,7 @@
 package com.jecrc.foundation.expense_tracker.service;
 
 import com.jecrc.foundation.expense_tracker.config.AsyncConfig;
+import com.jecrc.foundation.expense_tracker.config.ConfigProps;
 import com.jecrc.foundation.expense_tracker.constants.HttpResponseErrorCode;
 import com.jecrc.foundation.expense_tracker.constants.HttpResponseErrorMessage;
 import com.jecrc.foundation.expense_tracker.constants.HttpSuccessMessage;
@@ -13,6 +14,7 @@ import com.jecrc.foundation.expense_tracker.dos.SignUpDO;
 import com.jecrc.foundation.expense_tracker.dos.UserDO;
 import com.jecrc.foundation.expense_tracker.encryptor.Encryptor;
 import com.jecrc.foundation.expense_tracker.helper_service.AccessTokenService;
+import com.jecrc.foundation.expense_tracker.helper_service.ImageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,6 +38,12 @@ public class UserService {
 
   @Autowired
   private AccessTokenService accessTokenService;
+
+  @Autowired
+  private ConfigProps configProps;
+
+  @Autowired
+  private ImageService imageService;
 
   @Async(AsyncConfig.API_EXECUTOR)
   public void signUp(SignUpDO signUpDo, CompletableFuture<ResponseEntity<?>> responseFuture) {
@@ -110,7 +118,11 @@ public class UserService {
   @Async(AsyncConfig.API_EXECUTOR)
   public void uploadImage(Long userId, MultipartFile profileImage,
       CompletableFuture<ResponseEntity<?>> responseFuture) {
-    //TODO:to be implemented
+    String imageName = configProps.getProfileImagePrefixName() + "_" + userId;
+    imageService.uploadImageToS3Bucket(imageName, profileImage);
+    userDAO.updateProfile(userId, configProps.getAwsS3Host() + imageName);
+    responseFuture.complete(ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK.value(),
+        HttpSuccessMessage.USER_SUCCESSFULLY_UPLOADED_PROFILE_PIC)));
   }
 
   @Async(AsyncConfig.API_EXECUTOR)
