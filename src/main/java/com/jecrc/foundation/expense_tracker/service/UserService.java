@@ -2,19 +2,19 @@ package com.jecrc.foundation.expense_tracker.service;
 
 import com.jecrc.foundation.expense_tracker.config.AsyncConfig;
 import com.jecrc.foundation.expense_tracker.config.ConfigProps;
-import com.jecrc.foundation.expense_tracker.constants.HttpResponseErrorCode;
-import com.jecrc.foundation.expense_tracker.constants.HttpResponseErrorMessage;
-import com.jecrc.foundation.expense_tracker.constants.HttpSuccessMessage;
+import com.jecrc.foundation.expense_tracker.constants.HttpResponseCode;
+import com.jecrc.foundation.expense_tracker.constants.HttpResponseMessage;
 import com.jecrc.foundation.expense_tracker.converter.DataConverter;
-import com.jecrc.foundation.expense_tracker.dao.UserDAO;
-import com.jecrc.foundation.expense_tracker.dbos.UserDBO;
+import com.jecrc.foundation.expense_tracker.dao.UserDao;
+import com.jecrc.foundation.expense_tracker.dbos.UserDbo;
 import com.jecrc.foundation.expense_tracker.dos.ApiResponse;
-import com.jecrc.foundation.expense_tracker.dos.SignInDO;
-import com.jecrc.foundation.expense_tracker.dos.SignUpDO;
-import com.jecrc.foundation.expense_tracker.dos.UserDO;
+import com.jecrc.foundation.expense_tracker.dos.SignInDo;
+import com.jecrc.foundation.expense_tracker.dos.SignUpDo;
+import com.jecrc.foundation.expense_tracker.dos.UserDo;
 import com.jecrc.foundation.expense_tracker.encryptor.Encryptor;
 import com.jecrc.foundation.expense_tracker.helper_service.AccessTokenService;
 import com.jecrc.foundation.expense_tracker.helper_service.ImageService;
+import com.jecrc.foundation.expense_tracker.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,106 +30,143 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class UserService {
 
-  @Autowired
-  private UserDAO userDAO;
+
+  private final UserDao userDAO;
+  private final Encryptor encryptor;
+  private final AccessTokenService accessTokenService;
+  private final ConfigProps configProps;
+  private final ImageService imageService;
 
   @Autowired
-  private Encryptor encryptor;
-
-  @Autowired
-  private AccessTokenService accessTokenService;
-
-  @Autowired
-  private ConfigProps configProps;
-
-  @Autowired
-  private ImageService imageService;
-
-  @Async(AsyncConfig.API_EXECUTOR)
-  public void signUp(SignUpDO signUpDo, CompletableFuture<ResponseEntity<?>> responseFuture) {
-    UserDBO existingUser = userDAO.findUserByEmail(signUpDo.getEmail());
-    if (!Objects.isNull(existingUser)) {
-      log.info("User already exists with given userEmail");
-      responseFuture.complete(ResponseEntity.ok(
-          new ApiResponse<>(HttpResponseErrorCode.USER_WITH_MAIL_ALREADY_EXISTS,
-              HttpResponseErrorMessage.USER_WITH_MAIL_ALREADY_EXISTS)));
-      return;
-    }
-    signUpDo.setPassword(encryptor.getEncryptedPassword(signUpDo.getPassword()));
-    userDAO.save(DataConverter.convertSignUpDoToUserDbo(signUpDo));
-    responseFuture.complete(ResponseEntity.ok(
-        new ApiResponse<>(HttpStatus.OK.value(), HttpSuccessMessage.USER_SUCCESSFULLY_SAVED)));
+  private UserService(UserDao userDao, Encryptor encryptor, AccessTokenService accessTokenService,
+      ConfigProps configProps, ImageService imageService) {
+    this.userDAO = userDao;
+    this.encryptor = encryptor;
+    this.imageService = imageService;
+    this.configProps = configProps;
+    this.accessTokenService = accessTokenService;
   }
 
   @Async(AsyncConfig.API_EXECUTOR)
-  public void signIn(SignInDO signInDo, CompletableFuture<ResponseEntity<?>> responseFuture) {
-    UserDBO existingUser = userDAO.findUserByEmail(signInDo.getEmail());
-    if (Objects.isNull(existingUser)) {
-      log.info("User does not exists with given userEmail");
+  public void signUp(SignUpDo signUpDo, CompletableFuture<ResponseEntity<?>> responseFuture) {
+    try {
+      UserDbo existingUser = userDAO.findUserByEmail(signUpDo.getEmail());
+      if (!Objects.isNull(existingUser)) {
+        log.info("User already exists with given userEmail");
+        responseFuture.complete(ResponseEntity.ok(
+            new ApiResponse<>(HttpResponseCode.USER_WITH_MAIL_ALREADY_EXISTS,
+                HttpResponseMessage.USER_WITH_MAIL_ALREADY_EXISTS)));
+        return;
+      }
+      signUpDo.setPassword(encryptor.getEncryptedPassword(signUpDo.getPassword()));
+      userDAO.save(DataConverter.convertSignUpDoToUserDbo(signUpDo));
       responseFuture.complete(ResponseEntity.ok(
-          new ApiResponse<>(HttpResponseErrorCode.USER_NOT_FOUND,
-              HttpResponseErrorMessage.USER_NOT_FOUND)));
-      return;
-    }
-    if (!encryptor.checkEncryptedPassword(signInDo.getPassword(), existingUser.getPassword())) {
-      log.info("User password does not matched");
+          new ApiResponse<>(HttpStatus.OK.value(), HttpResponseMessage.USER_SUCCESSFULLY_SAVED)));
+    } catch (Exception e) {
+      log.error("Exception Occurred :{}", StringUtils.printStackTrace(e));
       responseFuture.complete(ResponseEntity.ok(
-          new ApiResponse<>(HttpResponseErrorCode.INCORRECT_CREDENTIALS,
-              HttpResponseErrorMessage.INCORRECT_CREDENTIALS)));
-      return;
+          new ApiResponse<>(HttpResponseCode.ERROR_OCCURRED, HttpResponseMessage.ERROR_OCCURRED)));
     }
-    signInDo.setAccessToken(accessTokenService.generateToken(existingUser.getId()));
-    responseFuture.complete(ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK.value(), signInDo)));
+  }
+
+  @Async(AsyncConfig.API_EXECUTOR)
+  public void signIn(SignInDo signInDo, CompletableFuture<ResponseEntity<?>> responseFuture) {
+    try {
+      UserDbo existingUser = userDAO.findUserByEmail(signInDo.getEmail());
+      if (Objects.isNull(existingUser)) {
+        log.info("User does not exists with given userEmail");
+        responseFuture.complete(ResponseEntity.ok(new ApiResponse<>(HttpResponseCode.USER_NOT_FOUND,
+            HttpResponseMessage.USER_NOT_FOUND)));
+        return;
+      }
+      if (!encryptor.checkEncryptedPassword(signInDo.getPassword(), existingUser.getPassword())) {
+        log.info("User password does not matched");
+        responseFuture.complete(ResponseEntity.ok(
+            new ApiResponse<>(HttpResponseCode.INCORRECT_CREDENTIALS,
+                HttpResponseMessage.INCORRECT_CREDENTIALS)));
+        return;
+      }
+      signInDo.setAccessToken(accessTokenService.generateToken(existingUser.getId()));
+      responseFuture.complete(
+          ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK.value(), signInDo)));
+    } catch (Exception e) {
+      log.error("Exception Occurred :{}", StringUtils.printStackTrace(e));
+      responseFuture.complete(ResponseEntity.ok(
+          new ApiResponse<>(HttpResponseCode.ERROR_OCCURRED, HttpResponseMessage.ERROR_OCCURRED)));
+    }
   }
 
   @Async(AsyncConfig.API_EXECUTOR)
   public void getUser(Long userId, CompletableFuture<ResponseEntity<?>> responseFuture) {
-    UserDBO existingUser = userDAO.findById(userId);
-    if (Objects.isNull(existingUser)) {
-      log.info("User does not exists with given userEmail");
+    try {
+      UserDbo existingUser = userDAO.findById(userId);
+      if (Objects.isNull(existingUser)) {
+        log.info("User does not exists with given userEmail");
+        responseFuture.complete(ResponseEntity.ok(new ApiResponse<>(HttpResponseCode.USER_NOT_FOUND,
+            HttpResponseMessage.USER_NOT_FOUND)));
+        return;
+      }
+      responseFuture.complete(ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK.value(),
+          DataConverter.convertUserDboToUserDo(existingUser))));
+    } catch (Exception e) {
+      log.error("Exception Occurred :{}", StringUtils.printStackTrace(e));
       responseFuture.complete(ResponseEntity.ok(
-          new ApiResponse<>(HttpResponseErrorCode.USER_NOT_FOUND,
-              HttpResponseErrorMessage.USER_NOT_FOUND)));
-      return;
+          new ApiResponse<>(HttpResponseCode.ERROR_OCCURRED, HttpResponseMessage.ERROR_OCCURRED)));
     }
-    responseFuture.complete(ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK.value(),
-        DataConverter.convertUserDboToUserDo(existingUser))));
   }
 
   @Async(AsyncConfig.API_EXECUTOR)
-  public void createUserProfile(UserDO existingUser, UserDO userDO,
+  public void createUserProfile(UserDo existingUser, UserDo userDO,
       CompletableFuture<ResponseEntity<?>> responseFuture) {
-    String existingUsername = existingUser.getUsername();
-    if (existingUsername != null && !existingUsername.equals(userDO.getUsername())) {
-      UserDBO user = userDAO.findUserByUsername(userDO.getUsername());
-      if (!Objects.isNull(user)) {
-        log.info("Username already exists");
-        responseFuture.complete(ResponseEntity.ok(
-            new ApiResponse<>(HttpResponseErrorCode.USERNAME_ALREADY_EXISTS,
-                HttpResponseErrorMessage.USERNAME_ALREADY_EXISTS)));
-        return;
+    try {
+      String existingUsername = existingUser.getUsername();
+      if (existingUsername != null && !existingUsername.equals(userDO.getUsername())) {
+        UserDbo user = userDAO.findUserByUsername(userDO.getUsername());
+        if (!Objects.isNull(user)) {
+          log.info("Username already exists");
+          responseFuture.complete(ResponseEntity.ok(
+              new ApiResponse<>(HttpResponseCode.USERNAME_ALREADY_EXISTS,
+                  HttpResponseMessage.USERNAME_ALREADY_EXISTS)));
+          return;
+        }
       }
+      userDAO.update(DataConverter.convertUserDoToUserDbo(userDO));
+      responseFuture.complete(ResponseEntity.ok(
+          new ApiResponse<>(HttpStatus.OK.value(), HttpResponseMessage.USER_SUCCESSFULLY_UPDATED)));
+    } catch (Exception e) {
+      log.error("Exception Occurred :{}", StringUtils.printStackTrace(e));
+      responseFuture.complete(ResponseEntity.ok(
+          new ApiResponse<>(HttpResponseCode.ERROR_OCCURRED, HttpResponseMessage.ERROR_OCCURRED)));
     }
-    userDAO.update(DataConverter.convertUserDoToUserDbo(userDO));
-    responseFuture.complete(ResponseEntity.ok(
-        new ApiResponse<>(HttpStatus.OK.value(), HttpSuccessMessage.USER_SUCCESSFULLY_UPDATED)));
   }
 
   @Async(AsyncConfig.API_EXECUTOR)
   public void uploadImage(Long userId, MultipartFile profileImage,
       CompletableFuture<ResponseEntity<?>> responseFuture) {
-    String imageName = configProps.getProfileImagePrefixName() + "_" + userId;
-    imageService.uploadImageToS3Bucket(imageName, profileImage);
-    userDAO.updateProfile(userId, configProps.getAwsS3Host() + imageName);
-    responseFuture.complete(ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK.value(),
-        HttpSuccessMessage.USER_SUCCESSFULLY_UPLOADED_PROFILE_PIC)));
+    try {
+      String imageName = configProps.getProfileImagePrefixName() + "_" + userId;
+      imageService.uploadImageToS3Bucket(imageName, profileImage);
+      userDAO.updateProfile(userId, configProps.getAwsS3Host() + imageName);
+      responseFuture.complete(ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK.value(),
+          HttpResponseMessage.USER_SUCCESSFULLY_UPLOADED_PROFILE_PIC)));
+    } catch (Exception e) {
+      log.error("Exception Occurred :{}", StringUtils.printStackTrace(e));
+      responseFuture.complete(ResponseEntity.ok(
+          new ApiResponse<>(HttpResponseCode.ERROR_OCCURRED, HttpResponseMessage.ERROR_OCCURRED)));
+    }
   }
 
   @Async(AsyncConfig.API_EXECUTOR)
   public void updateTransactionLimit(Long userId, Double transactionLimit,
       CompletableFuture<ResponseEntity<?>> responseFuture) {
-    userDAO.updateTransactionLimit(userId, transactionLimit);
-    responseFuture.complete(ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK.value(),
-        HttpSuccessMessage.TRANSACTION_LIMIT_SUCCESSFULLY_UPDATED)));
+    try {
+      userDAO.updateTransactionLimit(userId, transactionLimit);
+      responseFuture.complete(ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK.value(),
+          HttpResponseMessage.TRANSACTION_LIMIT_SUCCESSFULLY_UPDATED)));
+    } catch (Exception e) {
+      log.error("Exception Occurred :{}", StringUtils.printStackTrace(e));
+      responseFuture.complete(ResponseEntity.ok(
+          new ApiResponse<>(HttpResponseCode.ERROR_OCCURRED, HttpResponseMessage.ERROR_OCCURRED)));
+    }
   }
 }

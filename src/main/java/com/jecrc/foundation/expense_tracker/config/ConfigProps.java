@@ -8,8 +8,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class ConfigProps {
 
+  private final Configurator config;
   @Autowired
-  private Configurator config;
+  private ConfigProps(Configurator config){
+    this.config=config;
+  }
 
   /*****************************MYSQL CONFIGS*************************************************/
   public String getMySQLDriver() {

@@ -8,11 +8,15 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @Configuration
 public class AsyncConfig {
 
+  private final ConfigProps config;
+
   @Autowired
-  private ConfigProps config;
+  private AsyncConfig(ConfigProps config){
+    this.config=config;
+  }
 
   public static final String API_EXECUTOR="asyncExecutor";
-  public static final String TASK_EXECUTOR="asyncExecutor";
+  public static final String TASK_EXECUTOR="taskExecutor";
 
   @Bean(name = API_EXECUTOR)
   public ThreadPoolTaskExecutor asyncExecutor() {

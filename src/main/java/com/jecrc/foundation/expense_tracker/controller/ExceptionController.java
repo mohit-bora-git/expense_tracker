@@ -16,18 +16,12 @@ public class ExceptionController {
   @ExceptionHandler(value = ValidationException.class)
   public ResponseEntity<?> validationException(ValidationException e) {
     log.error("Exception Occurred due to  {}", StringUtils.printStackTrace(e));
-    ApiResponse<?> apiResponse = new ApiResponse<>();
-    apiResponse.setCode(e.getCode());
-    apiResponse.setMessage(e.getMessage());
-    return ResponseEntity.ok(apiResponse);
+    return ResponseEntity.ok(new ApiResponse<>(e.getCode(),e.getMessage()));
   }
 
   @ExceptionHandler(value = TokenAuthorizationFailedException.class)
   public ResponseEntity<?> tokenAuthorizationFailedException(TokenAuthorizationFailedException e) {
     log.error("Exception Occurred due to  {}", StringUtils.printStackTrace(e));
-    ApiResponse<?> apiResponse = new ApiResponse<>();
-    apiResponse.setCode(e.getCode());
-    apiResponse.setMessage(e.getMessage());
-    return ResponseEntity.ok(apiResponse);
+    return ResponseEntity.ok(new ApiResponse<>(e.getCode(),e.getMessage()));
   }
 }

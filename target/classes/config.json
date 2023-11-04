@@ -1,0 +1,26 @@
+{
+  "mysql.username": "root",
+  "mysql.password": "root",
+  "mysql.db.url": "jdbc:mysql://root:root@localhost:3307/expense_tracker",
+  "mysql.db.name": "expense_tracker",
+  "mysql.port": "3307",
+  "mysql.active.connections": "3",
+  "mysql.max.idle.connections": "5",
+  "mysql.driver": "com.mysql.cj.jdbc.Driver",
+  "async.threadpool.max.pool.size": "10",
+  "async.threadpool.core.pool.size": "5",
+  "async.threadpool.queue.capacity": "5000",
+  "async.threadpool.await.termination.seconds": "15",
+
+  "email.regex": "[a-zA-Z0-9][a-zA-Z0-9_.]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+$",
+  "password.min.length": "8",
+  "password.max.length": "15",
+  "email.masking.regex": "(?<=.{3}).(?=[^@]*?@)",
+
+  "secret.key": "eyJhbGciOiJIUzUxMiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY5NjQ5NTM4NywiaWF0IjoxNjk2NDk1Mzg3fQ.22NcFbeK4ZSrpiwPRtHzoMiroalzJ9KpJ9nT9PxvrLAS4FI6z1XTlLxA0pRqCFBRjE_lc2SUI7zi-BD3LzNZGQ",
+  "access.token.max.life": "864000000",
+  "jwt.issuer": "expense_tracker.com",
+  "jwt.auth.subject": "auth",
+
+  "app.email": "mohitbora1225@gmail.com"
+}

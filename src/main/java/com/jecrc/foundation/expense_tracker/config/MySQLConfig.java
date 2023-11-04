@@ -11,15 +11,18 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
 
 @Configuration
 public class MySQLConfig {
 
+  private final ConfigProps config;
+
   @Autowired
-  private ConfigProps config;
+  private MySQLConfig(ConfigProps config){
+    this.config=config;
+  }
 
   private DataSource dataSource;
 
@@ -46,7 +49,6 @@ public class MySQLConfig {
     factoryBean.setDataSource(dataSource);
     org.apache.ibatis.session.Configuration configuration =
         new org.apache.ibatis.session.Configuration();
-    configuration.setMapUnderscoreToCamelCase(true);
     factoryBean.setConfiguration(configuration);
     return factoryBean.getObject();
   }

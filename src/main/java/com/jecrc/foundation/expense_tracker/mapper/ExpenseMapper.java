@@ -1,6 +1,6 @@
 package com.jecrc.foundation.expense_tracker.mapper;
 
-import com.jecrc.foundation.expense_tracker.dbos.ExpenseDBO;
+import com.jecrc.foundation.expense_tracker.dbos.ExpenseDbo;
 import org.apache.ibatis.annotations.*;
 
 import java.sql.Date;
@@ -11,21 +11,21 @@ public interface ExpenseMapper {
 
   @Insert(
       "INSERT INTO expense (date,expense_type,transaction_amount,transaction_type,description,user_id) VALUES(#{date},#{expenseType},#{transactionAmount},#{transactionType},#{description},#{userId})")
-  void save(ExpenseDBO expense);
+  void save(ExpenseDbo expense);
 
   @Update(
       "UPDATE expense SET expense_type=#{expenseType},transaction_amount=#{transactionAmount},transaction_type=#{transactionType},description=#{description} WHERE id=#{id}")
-  void update(ExpenseDBO expense);
+  void update(ExpenseDbo expense);
 
   @Select("SELECT * FROM expense WHERE user_id=#{userId} AND date=#{date} ORDER BY created_at DESC")
-  List<ExpenseDBO> findExpensesWithDate(Date date, Long userId);
+  List<ExpenseDbo> findExpensesWithDate(Date date, Long userId);
 
   @Select(
       "SELECT * FROM expense WHERE user_id=#{userId} AND date BETWEEN #{startDate} AND #{endDate} ORDER BY created_at")
-  List<ExpenseDBO> findExpensesWithDateRange(Date startDate, Date endDate, Long userId);
+  List<ExpenseDbo> findExpensesWithDateRange(Date startDate, Date endDate, Long userId);
 
   @Select("SELECT * FROM expense WHERE id=#{id} ORDER BY create_at DESC")
-  ExpenseDBO findById(Long id);
+  ExpenseDbo findById(Long id);
 
   @Select("SELECT SUM(transaction_amount) FROM expense GROUP BY (user_id) HAVING user_id=#{id} AND date BETWEEN #{startDate} AND #{endDate}")
   Double findTotalMonthlyExpense(Long id,Date startDate,Date endDate);

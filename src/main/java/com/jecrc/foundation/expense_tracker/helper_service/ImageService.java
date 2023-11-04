@@ -12,11 +12,15 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class ImageService {
 
-  @Autowired
-  private AmazonS3Client amazonS3Client;
+  private final AmazonS3Client amazonS3Client;
+
+  private final ConfigProps configProps;
 
   @Autowired
-  private ConfigProps configProps;
+  private ImageService(AmazonS3Client amazonS3Client,ConfigProps configProps){
+    this.amazonS3Client=amazonS3Client;
+    this.configProps=configProps;
+  }
 
   @Async(value = AsyncConfig.TASK_EXECUTOR)
   public void uploadImageToS3Bucket(String fileName, MultipartFile image) {

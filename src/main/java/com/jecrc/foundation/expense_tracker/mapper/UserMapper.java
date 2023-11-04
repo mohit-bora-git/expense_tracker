@@ -1,6 +1,6 @@
 package com.jecrc.foundation.expense_tracker.mapper;
 
-import com.jecrc.foundation.expense_tracker.dbos.UserDBO;
+import com.jecrc.foundation.expense_tracker.dbos.UserDbo;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -12,22 +12,22 @@ import java.util.List;
 public interface UserMapper {
 
   @Insert("INSERT INTO users (email,password) VALUES (#{email},#{password})")
-  void save(UserDBO userDbo);
+  void save(UserDbo userDbo);
 
   @Select("SELECT * FROM users WHERE email=#{email}")
-  UserDBO findByEmail(String email);
+  UserDbo findByEmail(String email);
 
   @Select("SELECT * FROM users WHERE id=#{id}")
-  UserDBO findById(Long id);
+  UserDbo findById(Long id);
 
   @Select("SELECT * FROM users")
-  List<UserDBO> findAll();
+  List<UserDbo> findAll();
 
   @Select("SELECT * FROM users WHERE username=#{username}")
-  UserDBO findByUsername(String username);
+  UserDbo findByUsername(String username);
 
   @Update("UPDATE users SET name=#{name}, username=#{username} WHERE id=#{id}")
-  void update(UserDBO userDbo);
+  void update(UserDbo userDbo);
 
   @Update("UPDATE users SET profile_image_url=#{profileImageUrl} WHERE id=#{id}")
   void updateProfileImage(Long id, String imageUrl);

@@ -1,12 +1,12 @@
 package com.jecrc.foundation.expense_tracker.utils;
 
-import com.jecrc.foundation.expense_tracker.dos.UserDO;
+import com.jecrc.foundation.expense_tracker.dos.UserDo;
 
 public class EmailTemplateUtils {
   private EmailTemplateUtils() {
   }
 
-  public static String createTransactionLimitExceedTemplate(UserDO user, Double overHeadTransaction) {
+  public static String createTransactionLimitExceedTemplate(UserDo user, Double overHeadTransaction) {
     return new StringBuilder().append("Hello")
         .append(StringUtils.isNotEmpty(user.getName()) ? user.getName() : "User")
         .append("! Greeting from Expense Tracker App.\n\n")

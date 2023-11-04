@@ -1,14 +1,10 @@
 package com.jecrc.foundation.expense_tracker.controller;
 
-import com.jecrc.foundation.expense_tracker.constants.HttpResponseErrorCode;
-import com.jecrc.foundation.expense_tracker.constants.HttpResponseErrorMessage;
-import com.jecrc.foundation.expense_tracker.dos.ApiResponse;
-import com.jecrc.foundation.expense_tracker.dos.ExpenseDO;
-import com.jecrc.foundation.expense_tracker.dos.UserDO;
+import com.jecrc.foundation.expense_tracker.dos.ExpenseDo;
+import com.jecrc.foundation.expense_tracker.dos.UserDo;
 import com.jecrc.foundation.expense_tracker.helper_service.AccessTokenService;
 import com.jecrc.foundation.expense_tracker.service.ExpenseService;
 import com.jecrc.foundation.expense_tracker.utils.DateTimeUtils;
-import com.jecrc.foundation.expense_tracker.utils.StringUtils;
 import com.jecrc.foundation.expense_tracker.validator.ExpenseValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,56 +22,48 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class ExpenseController extends BaseController {
 
-  @Autowired
-  private ExpenseService expenseService;
+  private final ExpenseService expenseService;
+
+  private final ExpenseValidator expenseValidator;
+
+  private final AccessTokenService accessTokenService;
 
   @Autowired
-  private ExpenseValidator expenseValidator;
-
-  @Autowired
-  private AccessTokenService accessTokenService;
+  private ExpenseController(ExpenseService expenseService, ExpenseValidator expenseValidator,
+      AccessTokenService accessTokenService) {
+    this.expenseService = expenseService;
+    this.expenseValidator = expenseValidator;
+    this.accessTokenService = accessTokenService;
+  }
 
   @PostMapping(value = "/create_expense", consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public DeferredResult<?> createExpense(@RequestBody ExpenseDO expenseDo,
+  public DeferredResult<?> createExpense(@RequestBody ExpenseDo expenseDo,
       HttpServletRequest request) {
     DeferredResult<ResponseEntity<?>> df = getDeferredResult();
-    String apiEndPoint = "/v1/api/expense/create_expense";
+    String apiEndPoint = "/api/expense/create_expense";
     Long startTime = System.currentTimeMillis();
     String reqId = generateReqID();
-    try {
-      CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
-      UserDO user = accessTokenService.verifyAccessToken(request);
-      //validate expense
-      expenseService.createExpense(user, expenseDo, cf);
-      processDeferredResult(df, cf, apiEndPoint, startTime, reqId);
-    } catch (Exception e) {
-      log.error("Create expense request for createExpense failed due to : {}",
-          StringUtils.printStackTrace(e));
-      df.setResult(ResponseEntity.ok(new ApiResponse<>(HttpResponseErrorCode.ERROR_OCCURRED,
-          HttpResponseErrorMessage.ERROR_OCCURRED)));
-    }
+    CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
+    UserDo user = accessTokenService.verifyAccessToken(request);
+    //validate expense
+    expenseService.createExpense(user, expenseDo, cf);
+    processDeferredResult(df, cf, apiEndPoint, startTime, reqId);
     return df;
   }
 
   @PutMapping(value = "/update_expense/{expenseId}", consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public DeferredResult<ResponseEntity<?>> updateExpense(@PathVariable("expenseId") Long expenseId,
-      ExpenseDO expenseDO, HttpServletRequest request) {
+      ExpenseDo expenseDO, HttpServletRequest request) {
     DeferredResult<ResponseEntity<?>> df = getDeferredResult();
     String apiEndPoint = "/update_expense/{expenseId}";
     Long startTime = System.currentTimeMillis();
     String reqId = generateReqID();
-    try {
-      CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
-      UserDO user = accessTokenService.verifyAccessToken(request);
-      expenseService.updateExpense(user, expenseDO, cf);
-      processDeferredResult(df, cf, apiEndPoint, startTime, reqId);
-    } catch (Exception e) {
-      log.error("Update expense request failed due to : {}", StringUtils.printStackTrace(e));
-      df.setResult(ResponseEntity.ok(new ApiResponse<>(HttpResponseErrorCode.ERROR_OCCURRED,
-          HttpResponseErrorMessage.ERROR_OCCURRED)));
-    }
+    CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
+    UserDo user = accessTokenService.verifyAccessToken(request);
+    expenseService.updateExpense(user, expenseDO, cf);
+    processDeferredResult(df, cf, apiEndPoint, startTime, reqId);
     return df;
   }
 
@@ -85,16 +73,10 @@ public class ExpenseController extends BaseController {
     String apiEndPoint = "/get_expenses";
     Long startTime = System.currentTimeMillis();
     String reqId = generateReqID();
-    try {
-      CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
-      UserDO user = accessTokenService.verifyAccessToken(request);
-      expenseService.getExpense(user.getId(), cf);
-      processDeferredResult(df, cf, apiEndPoint, startTime, reqId);
-    } catch (Exception e) {
-      log.error("Get expense request  failed due to : {}", StringUtils.printStackTrace(e));
-      df.setResult(ResponseEntity.ok(new ApiResponse<>(HttpResponseErrorCode.ERROR_OCCURRED,
-          HttpResponseErrorMessage.ERROR_OCCURRED)));
-    }
+    CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
+    UserDo user = accessTokenService.verifyAccessToken(request);
+    expenseService.getExpense(user.getId(), cf);
+    processDeferredResult(df, cf, apiEndPoint, startTime, reqId);
     return df;
   }
 
@@ -105,16 +87,10 @@ public class ExpenseController extends BaseController {
     String apiEndPoint = "/get_monthly_expenses";
     Long startTime = System.currentTimeMillis();
     String reqId = generateReqID();
-    try {
-      CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
-      UserDO user = accessTokenService.verifyAccessToken(request);
-      expenseService.getMonthlyExpense(user.getId(), month, year, cf);
-      processDeferredResult(df, cf, apiEndPoint, startTime, reqId);
-    } catch (Exception e) {
-      log.error("Get monthly expense request  failed due to : {}", StringUtils.printStackTrace(e));
-      df.setResult(ResponseEntity.ok(new ApiResponse<>(HttpResponseErrorCode.ERROR_OCCURRED,
-          HttpResponseErrorMessage.ERROR_OCCURRED)));
-    }
+    CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
+    UserDo user = accessTokenService.verifyAccessToken(request);
+    expenseService.getMonthlyExpense(user.getId(), month, year, cf);
+    processDeferredResult(df, cf, apiEndPoint, startTime, reqId);
     return df;
   }
 
@@ -125,36 +101,24 @@ public class ExpenseController extends BaseController {
     String apiEndPoint = "/get_yearly_expense";
     Long startTime = System.currentTimeMillis();
     String reqId = generateReqID();
-    try {
-      CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
-      UserDO user = accessTokenService.verifyAccessToken(request);
-      expenseService.getYearlyExpense(user.getId(), year, cf);
-      processDeferredResult(df, cf, apiEndPoint, startTime, reqId);
-    } catch (Exception e) {
-      log.error("Get yearly expense request  failed due to : {}", StringUtils.printStackTrace(e));
-      df.setResult(ResponseEntity.ok(new ApiResponse<>(HttpResponseErrorCode.ERROR_OCCURRED,
-          HttpResponseErrorMessage.ERROR_OCCURRED)));
-    }
+    CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
+    UserDo user = accessTokenService.verifyAccessToken(request);
+    expenseService.getYearlyExpense(user.getId(), year, cf);
+    processDeferredResult(df, cf, apiEndPoint, startTime, reqId);
     return df;
   }
 
   @GetMapping(value = "/expense_by_date", produces = MediaType.APPLICATION_JSON_VALUE)
-  public DeferredResult<ResponseEntity<?>> getExpenseByDate(@RequestParam("startDate") Long date,
+  public DeferredResult<ResponseEntity<?>> getExpenseByDate(@RequestParam("date") Long date,
       HttpServletRequest request) {
     DeferredResult<ResponseEntity<?>> df = getDeferredResult();
     String apiEndPoint = "/get_expense";
     Long startTime = System.currentTimeMillis();
     String reqId = generateReqID();
-    try {
-      CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
-      UserDO user = accessTokenService.verifyAccessToken(request);
-      expenseService.getExpenseByDate(user.getId(), DateTimeUtils.getISTTimeInMillis(date), cf);
-      processDeferredResult(df, cf, apiEndPoint, startTime, reqId);
-    } catch (Exception e) {
-      log.error("Get range expense request failed due to : {}", StringUtils.printStackTrace(e));
-      df.setResult(ResponseEntity.ok(new ApiResponse<>(HttpResponseErrorCode.ERROR_OCCURRED,
-          HttpResponseErrorMessage.ERROR_OCCURRED)));
-    }
+    CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
+    UserDo user = accessTokenService.verifyAccessToken(request);
+    expenseService.getExpenseByDate(user.getId(), DateTimeUtils.getISTTimeInMillis(date), cf);
+    processDeferredResult(df, cf, apiEndPoint, startTime, reqId);
     return df;
   }
 
@@ -166,17 +130,11 @@ public class ExpenseController extends BaseController {
     String apiEndPoint = "/get_range_expense";
     Long startTime = System.currentTimeMillis();
     String reqId = generateReqID();
-    try {
-      CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
-      UserDO user = accessTokenService.verifyAccessToken(request);
-      expenseService.getRangeExpense(user.getId(), DateTimeUtils.getISTTimeInMillis(startDate),
-          DateTimeUtils.getISTTimeInMillis(endDate), cf);
-      processDeferredResult(df, cf, apiEndPoint, startTime, reqId);
-    } catch (Exception e) {
-      log.error("Get range expense request failed due to : {}", StringUtils.printStackTrace(e));
-      df.setResult(ResponseEntity.ok(new ApiResponse<>(HttpResponseErrorCode.ERROR_OCCURRED,
-          HttpResponseErrorMessage.ERROR_OCCURRED)));
-    }
+    CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
+    UserDo user = accessTokenService.verifyAccessToken(request);
+    expenseService.getRangeExpense(user.getId(), DateTimeUtils.getISTTimeInMillis(startDate),
+        DateTimeUtils.getISTTimeInMillis(endDate), cf);
+    processDeferredResult(df, cf, apiEndPoint, startTime, reqId);
     return df;
   }
 }

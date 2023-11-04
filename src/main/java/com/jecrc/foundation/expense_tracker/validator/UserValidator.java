@@ -1,14 +1,13 @@
 package com.jecrc.foundation.expense_tracker.validator;
 
 import com.jecrc.foundation.expense_tracker.config.ConfigProps;
-import com.jecrc.foundation.expense_tracker.constants.HttpResponseErrorCode;
-import com.jecrc.foundation.expense_tracker.constants.HttpResponseErrorMessage;
-import com.jecrc.foundation.expense_tracker.dos.SignInDO;
-import com.jecrc.foundation.expense_tracker.dos.SignUpDO;
+import com.jecrc.foundation.expense_tracker.constants.HttpResponseCode;
+import com.jecrc.foundation.expense_tracker.constants.HttpResponseMessage;
+import com.jecrc.foundation.expense_tracker.dos.SignInDo;
+import com.jecrc.foundation.expense_tracker.dos.SignUpDo;
 import com.jecrc.foundation.expense_tracker.exception.ValidationException;
 import com.jecrc.foundation.expense_tracker.utils.ValidationUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,16 +20,16 @@ public class UserValidator {
 
   //TODO:more validators needed for various field
 
-  public void validateSignUpDo(SignUpDO signUpDo) {
+  public void validateSignUpDo(SignUpDo signUpDo) {
     if (signUpDo == null || signUpDo.getEmail() == null || signUpDo.getPassword() == null) {
-      throw new ValidationException(HttpResponseErrorCode.INVALID_REQUEST_BODY,
-          HttpResponseErrorMessage.INVALID_REQUEST_BODY);
+      throw new ValidationException(HttpResponseCode.INVALID_REQUEST_BODY,
+          HttpResponseMessage.INVALID_REQUEST_BODY);
     } else if (validateEmail(signUpDo.getEmail())) {
-      throw new ValidationException(HttpResponseErrorCode.INVALID_EMAIL,
-          HttpResponseErrorMessage.INVALID_EMAIL);
+      throw new ValidationException(HttpResponseCode.INVALID_EMAIL,
+          HttpResponseMessage.INVALID_EMAIL);
     } else if (validatePassword(signUpDo.getPassword())) {
-      throw new ValidationException(HttpResponseErrorCode.INVALID_PASSWORD,
-          HttpResponseErrorMessage.INVALID_PASSWORD);
+      throw new ValidationException(HttpResponseCode.INVALID_PASSWORD,
+          HttpResponseMessage.INVALID_PASSWORD);
     }
   }
 
@@ -44,10 +43,10 @@ public class UserValidator {
     return passwordLength < config.getPasswordMinLength() || passwordLength > config.getPasswordMaxLength();
   }
 
-  public void validateSignInDo(SignInDO signInDo) {
+  public void validateSignInDo(SignInDo signInDo) {
     if (signInDo == null || signInDo.getEmail() == null || signInDo.getPassword() == null) {
-      throw new ValidationException(HttpResponseErrorCode.INVALID_REQUEST_BODY,
-          HttpResponseErrorMessage.INVALID_REQUEST_BODY);
+      throw new ValidationException(HttpResponseCode.INVALID_REQUEST_BODY,
+          HttpResponseMessage.INVALID_REQUEST_BODY);
     }
   }
 

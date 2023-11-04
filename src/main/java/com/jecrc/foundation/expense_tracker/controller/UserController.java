@@ -1,14 +1,10 @@
 package com.jecrc.foundation.expense_tracker.controller;
 
-import com.jecrc.foundation.expense_tracker.constants.HttpResponseErrorCode;
-import com.jecrc.foundation.expense_tracker.constants.HttpResponseErrorMessage;
-import com.jecrc.foundation.expense_tracker.dos.ApiResponse;
-import com.jecrc.foundation.expense_tracker.dos.SignInDO;
-import com.jecrc.foundation.expense_tracker.dos.SignUpDO;
-import com.jecrc.foundation.expense_tracker.dos.UserDO;
+import com.jecrc.foundation.expense_tracker.dos.SignInDo;
+import com.jecrc.foundation.expense_tracker.dos.SignUpDo;
+import com.jecrc.foundation.expense_tracker.dos.UserDo;
 import com.jecrc.foundation.expense_tracker.helper_service.AccessTokenService;
 import com.jecrc.foundation.expense_tracker.service.UserService;
-import com.jecrc.foundation.expense_tracker.utils.StringUtils;
 import com.jecrc.foundation.expense_tracker.validator.UserValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,52 +22,45 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class UserController extends BaseController {
 
-  @Autowired
-  private UserService userService;
+  private final UserService userService;
+
+  private final UserValidator userValidator;
+
+  private final AccessTokenService accessTokenService;
 
   @Autowired
-  private UserValidator userValidator;
-
-  @Autowired
-  private AccessTokenService accessTokenService;
+  private UserController(UserService userService, UserValidator userValidator,
+      AccessTokenService accessTokenService) {
+    this.userService = userService;
+    this.userValidator = userValidator;
+    this.accessTokenService = accessTokenService;
+  }
 
   @PostMapping(value = "/sign_up", consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public DeferredResult<ResponseEntity<?>> signUp(@RequestBody SignUpDO signUpDo) {
+  public DeferredResult<ResponseEntity<?>> signUp(@RequestBody SignUpDo signUpDo) {
     DeferredResult<ResponseEntity<?>> df = getDeferredResult();
     String apiEndPoint = "/api/user/sign_up";
     String reqId = generateReqID();
-    try {
-      CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
-      log.info("Request received for signUp the user");
-      userValidator.validateSignUpDo(signUpDo);
-      userService.signUp(signUpDo, cf);
-      processDeferredResult(df, cf, apiEndPoint, System.currentTimeMillis(), reqId);
-    } catch (Exception e) {
-      log.error("Error occurred due to : {}", StringUtils.printStackTrace(e));
-      df.setResult(ResponseEntity.ok(new ApiResponse<>(HttpResponseErrorCode.ERROR_OCCURRED,
-          HttpResponseErrorMessage.ERROR_OCCURRED)));
-    }
+    CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
+    log.info("Request received for signUp the user");
+    userValidator.validateSignUpDo(signUpDo);
+    userService.signUp(signUpDo, cf);
+    processDeferredResult(df, cf, apiEndPoint, System.currentTimeMillis(), reqId);
     return df;
   }
 
   @PostMapping(value = "/sign_in", consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public DeferredResult<ResponseEntity<?>> signIn(@RequestBody SignInDO signInDo) {
+  public DeferredResult<ResponseEntity<?>> signIn(@RequestBody SignInDo signInDo) {
     DeferredResult<ResponseEntity<?>> df = getDeferredResult();
     CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
     String apiEndPoint = "/api/user/sign_in";
     String reqId = generateReqID();
-    try {
-      log.info("Request received for signIn the user");
-      userValidator.validateSignInDo(signInDo);
-      userService.signIn(signInDo, cf);
-      processDeferredResult(df, cf, apiEndPoint, System.currentTimeMillis(), reqId);
-    } catch (Exception e) {
-      log.error("Error occurred due to : {}", StringUtils.printStackTrace(e));
-      df.setResult(ResponseEntity.ok(new ApiResponse<>(HttpResponseErrorCode.ERROR_OCCURRED,
-          HttpResponseErrorMessage.ERROR_OCCURRED)));
-    }
+    log.info("Request received for signIn the user");
+    userValidator.validateSignInDo(signInDo);
+    userService.signIn(signInDo, cf);
+    processDeferredResult(df, cf, apiEndPoint, System.currentTimeMillis(), reqId);
     return df;
   }
 
@@ -81,37 +70,25 @@ public class UserController extends BaseController {
     CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
     String apiEndPoint = "/api/user/get";
     String reqId = generateReqID();
-    try {
-      log.info("Request received for get the users profile");
-      UserDO user = accessTokenService.verifyAccessToken(request);
-      userService.getUser(user.getId(), cf);
-      processDeferredResult(df, cf, apiEndPoint, System.currentTimeMillis(), reqId);
-    } catch (Exception e) {
-      log.error("Error occurred due to : {}", StringUtils.printStackTrace(e));
-      df.setResult(ResponseEntity.ok(new ApiResponse<>(HttpResponseErrorCode.ERROR_OCCURRED,
-          HttpResponseErrorMessage.ERROR_OCCURRED)));
-    }
+    log.info("Request received for get the users profile");
+    UserDo user = accessTokenService.verifyAccessToken(request);
+    userService.getUser(user.getId(), cf);
+    processDeferredResult(df, cf, apiEndPoint, System.currentTimeMillis(), reqId);
     return df;
   }
 
   @PutMapping(value = "/update_user_profile", consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public DeferredResult<ResponseEntity<?>> updateUserProfile(@RequestBody UserDO userDO,
+  public DeferredResult<ResponseEntity<?>> updateUserProfile(@RequestBody UserDo userDO,
       HttpServletRequest request) {
     DeferredResult<ResponseEntity<?>> df = getDeferredResult();
     CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
     String apiEndPoint = "/api/user/update_user_profile";
     String reqId = generateReqID();
-    try {
-      log.info("Request received for updating the users profile");
-      UserDO user = accessTokenService.verifyAccessToken(request);
-      userService.createUserProfile(user, userDO, cf);
-      processDeferredResult(df, cf, apiEndPoint, System.currentTimeMillis(), reqId);
-    } catch (Exception e) {
-      log.error("Error occurred due to : {}", StringUtils.printStackTrace(e));
-      df.setResult(ResponseEntity.ok(new ApiResponse<>(HttpResponseErrorCode.ERROR_OCCURRED,
-          HttpResponseErrorMessage.ERROR_OCCURRED)));
-    }
+    log.info("Request received for updating the users profile");
+    UserDo user = accessTokenService.verifyAccessToken(request);
+    userService.createUserProfile(user, userDO, cf);
+    processDeferredResult(df, cf, apiEndPoint, System.currentTimeMillis(), reqId);
     return df;
   }
 
@@ -123,37 +100,25 @@ public class UserController extends BaseController {
     CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
     String apiEndPoint = "/api/user/upload_image";
     String reqId = generateReqID();
-    try {
-      log.info("Request received for uploading the users profile");
-      UserDO user = accessTokenService.verifyAccessToken(request);
-      //TODO:create service for upload user profile (integrate AWS S3 or GCP)
-      processDeferredResult(df, cf, apiEndPoint, System.currentTimeMillis(), reqId);
-    } catch (Exception e) {
-      log.error("Error occurred due to : {}", StringUtils.printStackTrace(e));
-      df.setResult(ResponseEntity.ok(new ApiResponse<>(HttpResponseErrorCode.ERROR_OCCURRED,
-          HttpResponseErrorMessage.ERROR_OCCURRED)));
-    }
+    log.info("Request received for uploading the users profile");
+    UserDo user = accessTokenService.verifyAccessToken(request);
+    //TODO:create service for upload user profile (integrate AWS S3 or GCP)
+    processDeferredResult(df, cf, apiEndPoint, System.currentTimeMillis(), reqId);
     return df;
   }
 
   @PostMapping(value = "/update_transaction_limit", consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public DeferredResult<ResponseEntity<?>> updateTransactionLimit(UserDO userDO,
+  public DeferredResult<ResponseEntity<?>> updateTransactionLimit(UserDo userDO,
       HttpServletRequest request) {
     DeferredResult<ResponseEntity<?>> df = getDeferredResult();
     CompletableFuture<ResponseEntity<?>> cf = new CompletableFuture<>();
     String apiEndPoint = "/api/user/update_transaction_limit";
     String reqId = generateReqID();
-    try {
-      log.info("Request received for uploading the users profile");
-      UserDO user = accessTokenService.verifyAccessToken(request);
-      userService.updateTransactionLimit(user.getId(), userDO.getTransactionLimit(), cf);
-      processDeferredResult(df, cf, apiEndPoint, System.currentTimeMillis(), reqId);
-    } catch (Exception e) {
-      log.error("Error occurred due to : {}", StringUtils.printStackTrace(e));
-      df.setResult(ResponseEntity.ok(new ApiResponse<>(HttpResponseErrorCode.ERROR_OCCURRED,
-          HttpResponseErrorMessage.ERROR_OCCURRED)));
-    }
+    log.info("Request received for uploading the users profile");
+    UserDo user = accessTokenService.verifyAccessToken(request);
+    userService.updateTransactionLimit(user.getId(), userDO.getTransactionLimit(), cf);
+    processDeferredResult(df, cf, apiEndPoint, System.currentTimeMillis(), reqId);
     return df;
   }
 
